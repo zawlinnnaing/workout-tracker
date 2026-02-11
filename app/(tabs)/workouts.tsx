@@ -13,6 +13,7 @@ import {
     TextInput,
     View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function WorkoutsScreen() {
   const { workouts, addWorkout, deleteWorkout } = useWorkouts();
@@ -76,78 +77,84 @@ export default function WorkoutsScreen() {
   );
 
   return (
-    <ThemedView style={styles.container}>
-      <View style={styles.header}>
-        <ThemedText type="title">My Workouts</ThemedText>
-        <Pressable
-          style={[styles.addButton, { backgroundColor: primaryColor }]}
-          onPress={() => setShowNewWorkoutInput(true)}
-        >
-          <Ionicons name="add" size={24} color="white" />
-        </Pressable>
-      </View>
+    <SafeAreaView style={{ flex: 1, backgroundColor }}>
+      <ThemedView style={styles.container}>
+        <View style={styles.header}>
+          <ThemedText type="title">My Workouts</ThemedText>
+          <Pressable
+            style={[styles.addButton, { backgroundColor: primaryColor }]}
+            onPress={() => setShowNewWorkoutInput(true)}
+          >
+            <Ionicons name="add" size={24} color="white" />
+          </Pressable>
+        </View>
 
-      {showNewWorkoutInput && (
-        <View
-          style={[styles.newWorkoutContainer, { borderColor: primaryColor }]}
-        >
-          <TextInput
-            style={[
-              styles.input,
-              { color: textColor, borderColor: primaryColor },
-            ]}
-            placeholder="Workout name"
-            placeholderTextColor={textColor + "80"}
-            value={newWorkoutName}
-            onChangeText={setNewWorkoutName}
-            autoFocus
-            onSubmitEditing={handleCreateWorkout}
-          />
-          <View style={styles.buttonRow}>
-            <Pressable
-              style={[styles.cancelButton, { borderColor: primaryColor }]}
-              onPress={() => {
-                setShowNewWorkoutInput(false);
-                setNewWorkoutName("");
-              }}
-            >
-              <ThemedText>Cancel</ThemedText>
-            </Pressable>
-            <Pressable
-              style={[styles.createButton, { backgroundColor: primaryColor }]}
-              onPress={handleCreateWorkout}
-            >
-              <ThemedText style={styles.createButtonText}>Create</ThemedText>
-            </Pressable>
+        {showNewWorkoutInput && (
+          <View
+            style={[styles.newWorkoutContainer, { borderColor: primaryColor }]}
+          >
+            <TextInput
+              style={[
+                styles.input,
+                { color: textColor, borderColor: primaryColor },
+              ]}
+              placeholder="Workout name"
+              placeholderTextColor={textColor + "80"}
+              value={newWorkoutName}
+              onChangeText={setNewWorkoutName}
+              autoFocus
+              onSubmitEditing={handleCreateWorkout}
+            />
+            <View style={styles.buttonRow}>
+              <Pressable
+                style={[styles.cancelButton, { borderColor: primaryColor }]}
+                onPress={() => {
+                  setShowNewWorkoutInput(false);
+                  setNewWorkoutName("");
+                }}
+              >
+                <ThemedText>Cancel</ThemedText>
+              </Pressable>
+              <Pressable
+                style={[styles.createButton, { backgroundColor: primaryColor }]}
+                onPress={handleCreateWorkout}
+              >
+                <ThemedText style={styles.createButtonText}>Create</ThemedText>
+              </Pressable>
+            </View>
           </View>
-        </View>
-      )}
+        )}
 
-      {workouts.length === 0 ? (
-        <View style={styles.emptyState}>
-          <Ionicons name="barbell-outline" size={64} color={textColor + "40"} />
-          <ThemedText style={styles.emptyText}>No workouts yet</ThemedText>
-          <ThemedText style={styles.emptySubtext}>
-            Tap the + button to create your first workout
-          </ThemedText>
-        </View>
-      ) : (
-        <FlatList
-          data={workouts}
-          renderItem={renderWorkoutItem}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.listContent}
-          showsVerticalScrollIndicator={false}
-        />
-      )}
-    </ThemedView>
+        {workouts.length === 0 ? (
+          <View style={styles.emptyState}>
+            <Ionicons
+              name="barbell-outline"
+              size={64}
+              color={textColor + "40"}
+            />
+            <ThemedText style={styles.emptyText}>No workouts yet</ThemedText>
+            <ThemedText style={styles.emptySubtext}>
+              Tap the + button to create your first workout
+            </ThemedText>
+          </View>
+        ) : (
+          <FlatList
+            data={workouts}
+            renderItem={renderWorkoutItem}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.listContent}
+            showsVerticalScrollIndicator={false}
+          />
+        )}
+      </ThemedView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    paddingHorizontal: 16,
   },
   header: {
     flexDirection: "row",
