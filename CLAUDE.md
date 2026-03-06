@@ -5,6 +5,7 @@
 React Native app built with Expo Router (file-based routing). TypeScript throughout.
 
 **Key directories:**
+
 - `app/` — screens and layouts (Expo Router)
 - `app/(tabs)/` — tab screens
 - `components/` — shared UI components
