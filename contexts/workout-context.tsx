@@ -1,5 +1,5 @@
-import { Exercise, ExerciseSet, Workout } from "@/types/workout";
-import React, { createContext, useCallback, useContext, useState } from "react";
+import { Exercise, ExerciseSet, Workout } from '@/types/workout';
+import React, { createContext, useCallback, useContext, useState } from 'react';
 
 let _nextId = 0;
 const generateId = () => `${Date.now()}-${++_nextId}`;
@@ -217,7 +217,7 @@ export function WorkoutProvider({ children }: { children: React.ReactNode }) {
 export function useWorkouts() {
   const context = useContext(WorkoutContext);
   if (context === undefined) {
-    throw new Error("useWorkouts must be used within a WorkoutProvider");
+    throw new Error('useWorkouts must be used within a WorkoutProvider');
   }
   return context;
 }

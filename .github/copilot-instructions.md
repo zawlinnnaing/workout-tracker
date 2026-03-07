@@ -60,7 +60,7 @@ export function WorkoutListHOC() {
 
   const handleWorkoutPress = useCallback(
     (id: string) => {
-      navigation.navigate("workout", { id });
+      navigation.navigate('workout', { id });
     },
     [navigation],
   );

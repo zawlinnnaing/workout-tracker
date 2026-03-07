@@ -1,34 +1,28 @@
-import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
-import { useWorkouts } from "@/contexts/workout-context";
-import { useThemeColor } from "@/hooks/use-theme-color";
-import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import { useState } from "react";
-import {
-    Alert,
-    FlatList,
-    Pressable,
-    StyleSheet,
-    TextInput,
-    View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
+import { useWorkouts } from '@/contexts/workout-context';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
+import { Alert, FlatList, Pressable, TextInput, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+const PRIMARY_COLOR = '#0a7ea4';
 
 export default function WorkoutsScreen() {
   const { workouts, addWorkout, deleteWorkout } = useWorkouts();
   const router = useRouter();
   const [showNewWorkoutInput, setShowNewWorkoutInput] = useState(false);
-  const [newWorkoutName, setNewWorkoutName] = useState("");
+  const [newWorkoutName, setNewWorkoutName] = useState('');
 
-  const primaryColor = useThemeColor({}, "tint");
-  const textColor = useThemeColor({}, "text");
-  const backgroundColor = useThemeColor({}, "background");
+  const colorScheme = useColorScheme() ?? 'light';
+  const textColor = colorScheme === 'dark' ? '#ECEDEE' : '#11181C';
 
   const handleCreateWorkout = () => {
     if (newWorkoutName.trim()) {
       const workout = addWorkout(newWorkoutName.trim());
-      setNewWorkoutName("");
+      setNewWorkoutName('');
       setShowNewWorkoutInput(false);
       router.push(`/workout/${workout.id}`);
     }
@@ -36,13 +30,13 @@ export default function WorkoutsScreen() {
 
   const handleDeleteWorkout = (id: string, name: string) => {
     Alert.alert(
-      "Delete Workout",
+      'Delete Workout',
       `Are you sure you want to delete "${name}"?`,
       [
-        { text: "Cancel", style: "cancel" },
+        { text: 'Cancel', style: 'cancel' },
         {
-          text: "Delete",
-          style: "destructive",
+          text: 'Delete',
+          style: 'destructive',
           onPress: () => deleteWorkout(id),
         },
       ],
@@ -51,24 +45,29 @@ export default function WorkoutsScreen() {
 
   const renderWorkoutItem = ({ item }: { item: any }) => (
     <Pressable
-      style={({ pressed }) => [
-        styles.workoutCard,
-        { backgroundColor: backgroundColor, opacity: pressed ? 0.7 : 1 },
-      ]}
+      className="flex-row items-center justify-between rounded-xl bg-[#fff] p-4 dark:bg-[#151718]"
+      style={({ pressed }) => ({
+        opacity: pressed ? 0.7 : 1,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
+      })}
       onPress={() => router.push(`/workout/${item.id}`)}
     >
-      <View style={styles.workoutInfo}>
+      <View className="flex-1">
         <ThemedText type="subtitle">{item.name}</ThemedText>
-        <ThemedText style={styles.exerciseCount}>
+        <ThemedText className="mt-1 text-sm opacity-70">
           {item.exercises.length} exercise
-          {item.exercises.length !== 1 ? "s" : ""}
+          {item.exercises.length !== 1 ? 's' : ''}
         </ThemedText>
-        <ThemedText style={styles.dateText}>
+        <ThemedText className="mt-1 text-xs opacity-50">
           {new Date(item.createdAt).toLocaleDateString()}
         </ThemedText>
       </View>
       <Pressable
-        style={styles.deleteButton}
+        className="p-2"
         onPress={() => handleDeleteWorkout(item.id, item.name)}
       >
         <Ionicons name="trash-outline" size={24} color="red" />
@@ -77,12 +76,13 @@ export default function WorkoutsScreen() {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor }}>
-      <ThemedView style={styles.container}>
-        <View style={styles.header}>
+    <SafeAreaView className="flex-1 bg-[#fff] dark:bg-[#151718]">
+      <ThemedView className="flex-1 px-4">
+        <View className="mb-5 mt-4 flex-row items-center justify-between">
           <ThemedText type="title">My Workouts</ThemedText>
           <Pressable
-            style={[styles.addButton, { backgroundColor: primaryColor }]}
+            className="h-10 w-10 items-center justify-center rounded-full"
+            style={{ backgroundColor: PRIMARY_COLOR }}
             onPress={() => setShowNewWorkoutInput(true)}
           >
             <Ionicons name="add" size={24} color="white" />
@@ -91,49 +91,54 @@ export default function WorkoutsScreen() {
 
         {showNewWorkoutInput && (
           <View
-            style={[styles.newWorkoutContainer, { borderColor: primaryColor }]}
+            className="mb-5 rounded-xl border-2 p-4"
+            style={{ borderColor: PRIMARY_COLOR }}
           >
             <TextInput
-              style={[
-                styles.input,
-                { color: textColor, borderColor: primaryColor },
-              ]}
+              className="mb-3 rounded-lg border p-3 text-base text-[#11181C] dark:text-[#ECEDEE]"
+              style={{ borderColor: PRIMARY_COLOR }}
               placeholder="Workout name"
-              placeholderTextColor={textColor + "80"}
+              placeholderTextColor={textColor + '80'}
               value={newWorkoutName}
               onChangeText={setNewWorkoutName}
               autoFocus
               onSubmitEditing={handleCreateWorkout}
             />
-            <View style={styles.buttonRow}>
+            <View className="flex-row gap-3">
               <Pressable
-                style={[styles.cancelButton, { borderColor: primaryColor }]}
+                className="flex-1 items-center rounded-lg border p-3"
+                style={{ borderColor: PRIMARY_COLOR }}
                 onPress={() => {
                   setShowNewWorkoutInput(false);
-                  setNewWorkoutName("");
+                  setNewWorkoutName('');
                 }}
               >
                 <ThemedText>Cancel</ThemedText>
               </Pressable>
               <Pressable
-                style={[styles.createButton, { backgroundColor: primaryColor }]}
+                className="flex-1 items-center rounded-lg p-3"
+                style={{ backgroundColor: PRIMARY_COLOR }}
                 onPress={handleCreateWorkout}
               >
-                <ThemedText style={styles.createButtonText}>Create</ThemedText>
+                <ThemedText style={{ color: 'white', fontWeight: '600' }}>
+                  Create
+                </ThemedText>
               </Pressable>
             </View>
           </View>
         )}
 
         {workouts.length === 0 ? (
-          <View style={styles.emptyState}>
+          <View className="flex-1 items-center justify-center gap-3">
             <Ionicons
               name="barbell-outline"
               size={64}
-              color={textColor + "40"}
+              color={textColor + '40'}
             />
-            <ThemedText style={styles.emptyText}>No workouts yet</ThemedText>
-            <ThemedText style={styles.emptySubtext}>
+            <ThemedText className="text-lg font-semibold">
+              No workouts yet
+            </ThemedText>
+            <ThemedText className="text-center text-sm opacity-70">
               Tap the + button to create your first workout
             </ThemedText>
           </View>
@@ -142,7 +147,7 @@ export default function WorkoutsScreen() {
             data={workouts}
             renderItem={renderWorkoutItem}
             keyExtractor={(item) => item.id}
-            contentContainerStyle={styles.listContent}
+            contentContainerStyle={{ gap: 12 }}
             showsVerticalScrollIndicator={false}
           />
         )}
@@ -150,103 +155,3 @@ export default function WorkoutsScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 16,
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  addButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  newWorkoutContainer: {
-    padding: 16,
-    borderRadius: 12,
-    borderWidth: 2,
-    marginBottom: 20,
-  },
-  input: {
-    fontSize: 16,
-    padding: 12,
-    borderWidth: 1,
-    borderRadius: 8,
-    marginBottom: 12,
-  },
-  buttonRow: {
-    flexDirection: "row",
-    gap: 12,
-  },
-  cancelButton: {
-    flex: 1,
-    padding: 12,
-    borderRadius: 8,
-    borderWidth: 1,
-    alignItems: "center",
-  },
-  createButton: {
-    flex: 1,
-    padding: 12,
-    borderRadius: 8,
-    alignItems: "center",
-  },
-  createButtonText: {
-    color: "white",
-    fontWeight: "600",
-  },
-  listContent: {
-    gap: 12,
-  },
-  workoutCard: {
-    padding: 16,
-    borderRadius: 12,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  workoutInfo: {
-    flex: 1,
-  },
-  exerciseCount: {
-    fontSize: 14,
-    opacity: 0.7,
-    marginTop: 4,
-  },
-  dateText: {
-    fontSize: 12,
-    opacity: 0.5,
-    marginTop: 4,
-  },
-  deleteButton: {
-    padding: 8,
-  },
-  emptyState: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 12,
-  },
-  emptyText: {
-    fontSize: 18,
-    fontWeight: "600",
-  },
-  emptySubtext: {
-    fontSize: 14,
-    opacity: 0.7,
-    textAlign: "center",
-  },
-});

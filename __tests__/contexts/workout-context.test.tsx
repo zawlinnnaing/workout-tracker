@@ -1,94 +1,94 @@
-import { act, renderHook } from "@testing-library/react-native";
-import React from "react";
+import { act, renderHook } from '@testing-library/react-native';
+import React from 'react';
 
-import { WorkoutProvider, useWorkouts } from "@/contexts/workout-context";
+import { WorkoutProvider, useWorkouts } from '@/contexts/workout-context';
 
 function wrapper({ children }: { children: React.ReactNode }) {
   return <WorkoutProvider>{children}</WorkoutProvider>;
 }
 
-describe("useWorkouts", () => {
-  it("throws when used outside of WorkoutProvider", () => {
+describe('useWorkouts', () => {
+  it('throws when used outside of WorkoutProvider', () => {
     expect(() => renderHook(() => useWorkouts())).toThrow(
-      "useWorkouts must be used within a WorkoutProvider",
+      'useWorkouts must be used within a WorkoutProvider',
     );
   });
 
-  it("starts with an empty workout list", () => {
+  it('starts with an empty workout list', () => {
     const { result } = renderHook(() => useWorkouts(), { wrapper });
     expect(result.current.workouts).toEqual([]);
   });
 
-  describe("addWorkout", () => {
-    it("adds a workout and returns it", () => {
+  describe('addWorkout', () => {
+    it('adds a workout and returns it', () => {
       const { result } = renderHook(() => useWorkouts(), { wrapper });
 
       let workout: ReturnType<typeof result.current.addWorkout>;
       act(() => {
-        workout = result.current.addWorkout("Leg Day");
+        workout = result.current.addWorkout('Leg Day');
       });
 
       expect(result.current.workouts).toHaveLength(1);
-      expect(result.current.workouts[0].name).toBe("Leg Day");
+      expect(result.current.workouts[0].name).toBe('Leg Day');
       expect(result.current.workouts[0].exercises).toEqual([]);
       expect(result.current.workouts[0].id).toBeDefined();
       expect(result.current.workouts[0].createdAt).toBeInstanceOf(Date);
-      expect(workout!.name).toBe("Leg Day");
+      expect(workout!.name).toBe('Leg Day');
     });
 
-    it("adds multiple workouts", () => {
+    it('adds multiple workouts', () => {
       const { result } = renderHook(() => useWorkouts(), { wrapper });
 
       act(() => {
-        result.current.addWorkout("Push Day");
-        result.current.addWorkout("Pull Day");
+        result.current.addWorkout('Push Day');
+        result.current.addWorkout('Pull Day');
       });
 
       expect(result.current.workouts).toHaveLength(2);
-      expect(result.current.workouts[0].name).toBe("Push Day");
-      expect(result.current.workouts[1].name).toBe("Pull Day");
+      expect(result.current.workouts[0].name).toBe('Push Day');
+      expect(result.current.workouts[1].name).toBe('Pull Day');
     });
   });
 
-  describe("updateWorkout", () => {
-    it("updates a workout by id", () => {
+  describe('updateWorkout', () => {
+    it('updates a workout by id', () => {
       const { result } = renderHook(() => useWorkouts(), { wrapper });
 
       let id: string;
       act(() => {
-        id = result.current.addWorkout("Old Name").id;
+        id = result.current.addWorkout('Old Name').id;
       });
       act(() => {
-        result.current.updateWorkout(id!, { name: "New Name" });
+        result.current.updateWorkout(id!, { name: 'New Name' });
       });
 
-      expect(result.current.workouts[0].name).toBe("New Name");
+      expect(result.current.workouts[0].name).toBe('New Name');
     });
 
-    it("does not affect other workouts", () => {
+    it('does not affect other workouts', () => {
       const { result } = renderHook(() => useWorkouts(), { wrapper });
 
       let id1: string;
       act(() => {
-        id1 = result.current.addWorkout("Workout A").id;
-        result.current.addWorkout("Workout B");
+        id1 = result.current.addWorkout('Workout A').id;
+        result.current.addWorkout('Workout B');
       });
       act(() => {
-        result.current.updateWorkout(id1!, { name: "Updated A" });
+        result.current.updateWorkout(id1!, { name: 'Updated A' });
       });
 
-      expect(result.current.workouts[0].name).toBe("Updated A");
-      expect(result.current.workouts[1].name).toBe("Workout B");
+      expect(result.current.workouts[0].name).toBe('Updated A');
+      expect(result.current.workouts[1].name).toBe('Workout B');
     });
   });
 
-  describe("deleteWorkout", () => {
-    it("removes a workout by id", () => {
+  describe('deleteWorkout', () => {
+    it('removes a workout by id', () => {
       const { result } = renderHook(() => useWorkouts(), { wrapper });
 
       let id: string;
       act(() => {
-        id = result.current.addWorkout("To Delete").id;
+        id = result.current.addWorkout('To Delete').id;
       });
       act(() => {
         result.current.deleteWorkout(id!);
@@ -97,93 +97,93 @@ describe("useWorkouts", () => {
       expect(result.current.workouts).toHaveLength(0);
     });
 
-    it("only removes the targeted workout", () => {
+    it('only removes the targeted workout', () => {
       const { result } = renderHook(() => useWorkouts(), { wrapper });
 
       let id1: string;
       act(() => {
-        id1 = result.current.addWorkout("Delete Me").id;
-        result.current.addWorkout("Keep Me");
+        id1 = result.current.addWorkout('Delete Me').id;
+        result.current.addWorkout('Keep Me');
       });
       act(() => {
         result.current.deleteWorkout(id1!);
       });
 
       expect(result.current.workouts).toHaveLength(1);
-      expect(result.current.workouts[0].name).toBe("Keep Me");
+      expect(result.current.workouts[0].name).toBe('Keep Me');
     });
   });
 
-  describe("getWorkoutById", () => {
-    it("returns the workout with the given id", () => {
+  describe('getWorkoutById', () => {
+    it('returns the workout with the given id', () => {
       const { result } = renderHook(() => useWorkouts(), { wrapper });
 
       let id: string;
       act(() => {
-        id = result.current.addWorkout("Find Me").id;
+        id = result.current.addWorkout('Find Me').id;
       });
 
       const found = result.current.getWorkoutById(id!);
-      expect(found?.name).toBe("Find Me");
+      expect(found?.name).toBe('Find Me');
     });
 
-    it("returns undefined for an unknown id", () => {
+    it('returns undefined for an unknown id', () => {
       const { result } = renderHook(() => useWorkouts(), { wrapper });
 
-      expect(result.current.getWorkoutById("nonexistent")).toBeUndefined();
+      expect(result.current.getWorkoutById('nonexistent')).toBeUndefined();
     });
   });
 
-  describe("addExerciseToWorkout", () => {
-    it("adds an exercise to the specified workout", () => {
+  describe('addExerciseToWorkout', () => {
+    it('adds an exercise to the specified workout', () => {
       const { result } = renderHook(() => useWorkouts(), { wrapper });
 
       let id: string;
       act(() => {
-        id = result.current.addWorkout("Strength").id;
+        id = result.current.addWorkout('Strength').id;
       });
       act(() => {
-        result.current.addExerciseToWorkout(id!, "Squat");
+        result.current.addExerciseToWorkout(id!, 'Squat');
       });
 
       const workout = result.current.getWorkoutById(id!);
       expect(workout?.exercises).toHaveLength(1);
-      expect(workout?.exercises[0].name).toBe("Squat");
+      expect(workout?.exercises[0].name).toBe('Squat');
       expect(workout?.exercises[0].sets).toEqual([]);
     });
   });
 
-  describe("updateExercise", () => {
-    it("updates an exercise name", () => {
+  describe('updateExercise', () => {
+    it('updates an exercise name', () => {
       const { result } = renderHook(() => useWorkouts(), { wrapper });
 
       let workoutId: string;
       let exerciseId: string;
       act(() => {
-        workoutId = result.current.addWorkout("Strength").id;
-        result.current.addExerciseToWorkout(workoutId, "Squat");
+        workoutId = result.current.addWorkout('Strength').id;
+        result.current.addExerciseToWorkout(workoutId, 'Squat');
       });
       exerciseId = result.current.getWorkoutById(workoutId!)!.exercises[0].id;
       act(() => {
         result.current.updateExercise(workoutId!, exerciseId, {
-          name: "Back Squat",
+          name: 'Back Squat',
         });
       });
 
       const exercise = result.current.getWorkoutById(workoutId!)!.exercises[0];
-      expect(exercise.name).toBe("Back Squat");
+      expect(exercise.name).toBe('Back Squat');
     });
   });
 
-  describe("deleteExercise", () => {
-    it("removes an exercise from a workout", () => {
+  describe('deleteExercise', () => {
+    it('removes an exercise from a workout', () => {
       const { result } = renderHook(() => useWorkouts(), { wrapper });
 
       let workoutId: string;
       let exerciseId: string;
       act(() => {
-        workoutId = result.current.addWorkout("Strength").id;
-        result.current.addExerciseToWorkout(workoutId, "Squat");
+        workoutId = result.current.addWorkout('Strength').id;
+        result.current.addExerciseToWorkout(workoutId, 'Squat');
       });
       exerciseId = result.current.getWorkoutById(workoutId!)!.exercises[0].id;
       act(() => {
@@ -196,15 +196,15 @@ describe("useWorkouts", () => {
     });
   });
 
-  describe("addSetToExercise", () => {
-    it("adds a set with reps=0 to an exercise", () => {
+  describe('addSetToExercise', () => {
+    it('adds a set with reps=0 to an exercise', () => {
       const { result } = renderHook(() => useWorkouts(), { wrapper });
 
       let workoutId: string;
       let exerciseId: string;
       act(() => {
-        workoutId = result.current.addWorkout("Strength").id;
-        result.current.addExerciseToWorkout(workoutId, "Bench Press");
+        workoutId = result.current.addWorkout('Strength').id;
+        result.current.addExerciseToWorkout(workoutId, 'Bench Press');
       });
       exerciseId = result.current.getWorkoutById(workoutId!)!.exercises[0].id;
       act(() => {
@@ -218,16 +218,16 @@ describe("useWorkouts", () => {
     });
   });
 
-  describe("updateSet", () => {
-    it("updates reps and weight on a set", () => {
+  describe('updateSet', () => {
+    it('updates reps and weight on a set', () => {
       const { result } = renderHook(() => useWorkouts(), { wrapper });
 
       let workoutId: string;
       let exerciseId: string;
       let setId: string;
       act(() => {
-        workoutId = result.current.addWorkout("Strength").id;
-        result.current.addExerciseToWorkout(workoutId, "Deadlift");
+        workoutId = result.current.addWorkout('Strength').id;
+        result.current.addExerciseToWorkout(workoutId, 'Deadlift');
       });
       exerciseId = result.current.getWorkoutById(workoutId!)!.exercises[0].id;
       act(() => {
@@ -249,16 +249,16 @@ describe("useWorkouts", () => {
     });
   });
 
-  describe("deleteSet", () => {
-    it("removes a set from an exercise", () => {
+  describe('deleteSet', () => {
+    it('removes a set from an exercise', () => {
       const { result } = renderHook(() => useWorkouts(), { wrapper });
 
       let workoutId: string;
       let exerciseId: string;
       let setId: string;
       act(() => {
-        workoutId = result.current.addWorkout("Strength").id;
-        result.current.addExerciseToWorkout(workoutId, "OHP");
+        workoutId = result.current.addWorkout('Strength').id;
+        result.current.addExerciseToWorkout(workoutId, 'OHP');
       });
       exerciseId = result.current.getWorkoutById(workoutId!)!.exercises[0].id;
       act(() => {
