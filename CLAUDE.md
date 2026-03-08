@@ -33,6 +33,36 @@ function WorkoutCard({ id }: { id: string }) {
 }
 ```
 
+### Composition over props for UI variation
+
+Prefer compound components over boolean/enum props that change what a component renders. Expose named sub-components so callers assemble the UI themselves.
+
+```tsx
+// Good — compound component pattern
+function Card({ children }: { children: React.ReactNode }) {
+  return <View className="rounded-lg p-4">{children}</View>;
+}
+
+function CardHeader({ children }: { children: React.ReactNode }) {
+  return <View className="mb-2">{children}</View>;
+}
+
+function CardBody({ children }: { children: React.ReactNode }) {
+  return <View>{children}</View>;
+}
+
+// Caller composes the pieces they need
+<Card>
+  <CardHeader><Text>Chest Day</Text></CardHeader>
+  <CardBody><Text>5 exercises</Text></CardBody>
+</Card>
+
+// Bad — component grows a prop for every UI variant
+function Card({ title, subtitle, showBadge, showFooter }: CardProps) { ... }
+```
+
+When you find yourself adding a boolean/enum prop purely to swap out a chunk of JSX, extract that chunk into a sub-component instead.
+
 ### Higher-order components for side effects
 
 If a component needs external effects (data fetching, subscriptions, navigation side effects), isolate the effect in a HOC and pass the result as props to the pure inner component.
