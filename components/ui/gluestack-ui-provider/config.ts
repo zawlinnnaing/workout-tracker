@@ -144,6 +144,8 @@ export const config = {
     '--color-background-900': '39 38 37',
     '--color-background-950': '18 18 18',
 
+    '--color-muted': '',
+
     /* Background Special */
     '--color-background-error': '254 241 241',
     '--color-background-warning': '255 243 234',

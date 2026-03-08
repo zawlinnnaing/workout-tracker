@@ -1,5 +1,7 @@
 import { ThemedView } from '@/components/ThemedView';
+import { Card } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
+import { Input, InputField } from '@/components/ui/input';
 import { Text } from '@/components/ui/text';
 import { useWorkouts } from '@/contexts/WorkoutContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -7,10 +9,7 @@ import { Exercise } from '@/types/workout';
 import { Ionicons } from '@expo/vector-icons';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
-import { Input, InputField } from '@/components/ui/input';
 import { Alert, Pressable, ScrollView, View } from 'react-native';
-
-const PRIMARY_COLOR = '#0a7ea4';
 
 export default function WorkoutDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -20,10 +19,13 @@ export default function WorkoutDetailScreen() {
     updateExercise,
     deleteExercise,
   } = useWorkouts();
-
   const workout = getWorkoutById(id!);
   const [showAddExercise, setShowAddExercise] = useState(false);
   const [newExerciseName, setNewExerciseName] = useState('');
+  const [editingExerciseId, setEditingExerciseId] = useState<string | null>(
+    null,
+  );
+  const [editingExerciseName, setEditingExerciseName] = useState('');
 
   const colorScheme = useColorScheme() ?? 'light';
   const textColor = colorScheme === 'dark' ? '#ECEDEE' : '#11181C';
@@ -76,19 +78,46 @@ export default function WorkoutDetailScreen() {
   };
 
   const renderExercise = (exercise: Exercise) => (
-    <View
+    <Card
       key={exercise.id}
       className="rounded-xl bg-[#fff] p-4 dark:bg-[#151718]"
-      style={{
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
-      }}
     >
       <View className="mb-3 flex-row items-center justify-between">
-        <Heading size="lg">{exercise.name}</Heading>
+        {editingExerciseId === exercise.id ? (
+          <Input className="mr-3 flex-1" variant="underlined">
+            <InputField
+              value={editingExerciseName}
+              onChangeText={setEditingExerciseName}
+              autoFocus
+              onBlur={() => {
+                if (editingExerciseName.trim()) {
+                  updateExercise(workout.id, exercise.id, {
+                    name: editingExerciseName.trim(),
+                  });
+                }
+                setEditingExerciseId(null);
+              }}
+              onSubmitEditing={() => {
+                if (editingExerciseName.trim()) {
+                  updateExercise(workout.id, exercise.id, {
+                    name: editingExerciseName.trim(),
+                  });
+                }
+                setEditingExerciseId(null);
+              }}
+            />
+          </Input>
+        ) : (
+          <Pressable
+            onPress={() => {
+              setEditingExerciseId(exercise.id);
+              setEditingExerciseName(exercise.name);
+            }}
+            className="mr-3 flex-1"
+          >
+            <Heading size="lg">{exercise.name}</Heading>
+          </Pressable>
+        )}
         <Pressable
           onPress={() => handleDeleteExercise(exercise.id, exercise.name)}
         >
@@ -139,7 +168,7 @@ export default function WorkoutDetailScreen() {
           </Input>
         </View>
       </View>
-    </View>
+    </Card>
   );
 
   return (
@@ -163,10 +192,7 @@ export default function WorkoutDetailScreen() {
           </View>
 
           {showAddExercise && (
-            <View
-              className="mb-4 rounded-xl border-2 p-4"
-              style={{ borderColor: PRIMARY_COLOR }}
-            >
+            <Card className="mb-5">
               <Input className="mb-3">
                 <InputField
                   placeholder="Exercise name (e.g., Bench Press)"
@@ -178,8 +204,7 @@ export default function WorkoutDetailScreen() {
               </Input>
               <View className="flex-row gap-3">
                 <Pressable
-                  className="flex-1 items-center rounded-lg border p-3"
-                  style={{ borderColor: PRIMARY_COLOR }}
+                  className="flex-1 items-center rounded-lg border border-primary p-3"
                   onPress={() => {
                     setShowAddExercise(false);
                     setNewExerciseName('');
@@ -188,19 +213,17 @@ export default function WorkoutDetailScreen() {
                   <Text>Cancel</Text>
                 </Pressable>
                 <Pressable
-                  className="flex-1 items-center rounded-lg p-3"
-                  style={{ backgroundColor: PRIMARY_COLOR }}
+                  className="bg-primary flex-1 items-center rounded-lg p-3"
                   onPress={handleAddExercise}
                 >
                   <Text style={{ color: 'white', fontWeight: '600' }}>Add</Text>
                 </Pressable>
               </View>
-            </View>
+            </Card>
           )}
 
           <Pressable
-            className="mb-5 flex-row items-center justify-center gap-2 rounded-xl p-4"
-            style={{ backgroundColor: PRIMARY_COLOR }}
+            className="mb-5 flex-row items-center justify-center gap-2 rounded-xl bg-primary p-4"
             onPress={() => setShowAddExercise(true)}
           >
             <Ionicons name="add" size={20} color="white" />

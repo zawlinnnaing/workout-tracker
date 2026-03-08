@@ -3,7 +3,7 @@ import { WorkoutCard } from '@/components/WorkoutCard';
 import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
 import { useWorkouts } from '@/contexts/WorkoutContext';
-import { useThemeColor } from '@/hooks/useThemeColor';
+import { useColorScheme } from '@/hooks/useColorScheme';
 import { Workout } from '@/types/workout';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -18,9 +18,9 @@ export default function WorkoutsScreen() {
   const [showNewWorkoutInput, setShowNewWorkoutInput] = useState(false);
   const [newWorkoutName, setNewWorkoutName] = useState('');
 
-  const primaryColor = useThemeColor({}, 'primary');
-  const backgroundColor = useThemeColor({}, 'background');
-  const textColor = useThemeColor({}, 'text');
+  const colorScheme = useColorScheme() ?? 'light';
+  const iconOnPrimaryColor = colorScheme === 'dark' ? '#000000' : '#ffffff';
+  const mutedColor = colorScheme === 'dark' ? '#ffffff40' : '#00000040';
 
   const handleCreateWorkout = () => {
     if (newWorkoutName.trim()) {
@@ -55,24 +55,20 @@ export default function WorkoutsScreen() {
   );
 
   return (
-    <SafeAreaView className="flex-1" style={{ backgroundColor }}>
+    <SafeAreaView className="flex-1 bg-background-0">
       <ThemedView className="flex-1 px-4">
         <View className="mb-5 mt-4 flex-row items-center justify-between">
           <Heading size="2xl">My Workouts</Heading>
           <Pressable
-            className="h-10 w-10 items-center justify-center rounded-full"
-            style={{ backgroundColor: primaryColor }}
+            className="h-10 w-10 items-center justify-center rounded-full bg-primary"
             onPress={() => setShowNewWorkoutInput(true)}
           >
-            <Ionicons name="add" size={24} color={backgroundColor} />
+            <Ionicons name="add" size={24} color={iconOnPrimaryColor} />
           </Pressable>
         </View>
 
         {showNewWorkoutInput && (
-          <View
-            className="mb-5 rounded-xl border-2 p-4"
-            style={{ borderColor: primaryColor }}
-          >
+          <View className="mb-5 rounded-xl border-2 border-primary p-4">
             <Input className="mb-3">
               <InputField
                 placeholder="Workout name"
@@ -84,8 +80,7 @@ export default function WorkoutsScreen() {
             </Input>
             <View className="flex-row gap-3">
               <Pressable
-                className="flex-1 items-center rounded-lg border p-3"
-                style={{ borderColor: primaryColor }}
+                className="flex-1 items-center rounded-lg border border-primary p-3"
                 onPress={() => {
                   setShowNewWorkoutInput(false);
                   setNewWorkoutName('');
@@ -94,11 +89,10 @@ export default function WorkoutsScreen() {
                 <Text>Cancel</Text>
               </Pressable>
               <Pressable
-                className="flex-1 items-center rounded-lg p-3"
-                style={{ backgroundColor: primaryColor }}
+                className="flex-1 items-center rounded-lg bg-primary p-3"
                 onPress={handleCreateWorkout}
               >
-                <Text style={{ color: backgroundColor, fontWeight: '600' }}>
+                <Text className="font-semibold text-secondary-0">
                   Create
                 </Text>
               </Pressable>
@@ -111,7 +105,7 @@ export default function WorkoutsScreen() {
             <Ionicons
               name="barbell-outline"
               size={64}
-              color={textColor + '40'}
+              color={mutedColor}
             />
             <Heading size="md">No workouts yet</Heading>
             <Text className="text-center text-sm opacity-70">

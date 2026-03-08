@@ -150,6 +150,9 @@ module.exports = {
           950: 'rgb(var(--color-outline-950)/<alpha-value>)',
           DEFAULT: 'rgb(var(--color-outline-500)/<alpha-value>)',
         },
+        muted: {
+          DEFAULT: 'rgb(var(--color-background-muted)/<alpha-value>)',
+        },
         background: {
           0: 'rgb(var(--color-background-0)/<alpha-value>)',
           50: 'rgb(var(--color-background-50)/<alpha-value>)',
