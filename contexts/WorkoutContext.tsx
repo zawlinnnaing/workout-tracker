@@ -1,8 +1,5 @@
 import { Exercise, ExerciseSet, Workout } from '@/types/workout';
-import {
-  loadWorkouts,
-  saveWorkouts,
-} from '@/hooks/useWorkoutStorage';
+import { workoutStorage } from '@/storage';
 import React, {
   createContext,
   useCallback,
@@ -44,7 +41,7 @@ export function WorkoutProvider({ children }: { children: React.ReactNode }) {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    loadWorkouts().then((loaded) => {
+    workoutStorage.load().then((loaded) => {
       setWorkouts(loaded);
       setIsLoaded(true);
     });
@@ -52,7 +49,7 @@ export function WorkoutProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!isLoaded) return;
-    saveWorkouts(workouts);
+    workoutStorage.save(workouts);
   }, [workouts, isLoaded]);
 
   const addWorkout = useCallback((name: string): Workout => {

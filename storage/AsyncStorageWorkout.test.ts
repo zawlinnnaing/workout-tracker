@@ -1,7 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { loadWorkouts, saveWorkouts } from '@/hooks/useWorkoutStorage';
 import { Workout } from '@/types/workout';
+
+import { AsyncStorageWorkout } from './AsyncStorageWorkout';
+
+const storage = new AsyncStorageWorkout();
 
 const mockWorkouts: Workout[] = [
   {
@@ -29,16 +32,16 @@ beforeEach(async () => {
   await AsyncStorage.clear();
 });
 
-describe('loadWorkouts', () => {
+describe('AsyncStorageWorkout.load', () => {
   it('returns empty array when storage is empty', async () => {
-    const result = await loadWorkouts();
+    const result = await storage.load();
     expect(result).toEqual([]);
   });
 
   it('loads and deserializes workouts from storage', async () => {
-    await saveWorkouts(mockWorkouts);
+    await storage.save(mockWorkouts);
 
-    const result = await loadWorkouts();
+    const result = await storage.load();
 
     expect(result).toHaveLength(2);
     expect(result[0].id).toBe('1');
@@ -53,9 +56,9 @@ describe('loadWorkouts', () => {
   });
 
   it('preserves exercises and sets when loading', async () => {
-    await saveWorkouts(mockWorkouts);
+    await storage.save(mockWorkouts);
 
-    const result = await loadWorkouts();
+    const result = await storage.load();
 
     expect(result[0].exercises).toHaveLength(1);
     expect(result[0].exercises[0].name).toBe('Squat');
@@ -64,9 +67,9 @@ describe('loadWorkouts', () => {
   });
 });
 
-describe('saveWorkouts', () => {
+describe('AsyncStorageWorkout.save', () => {
   it('saves workouts to storage', async () => {
-    await saveWorkouts(mockWorkouts);
+    await storage.save(mockWorkouts);
 
     const raw = await AsyncStorage.getItem('workouts');
     expect(raw).not.toBeNull();
@@ -76,19 +79,19 @@ describe('saveWorkouts', () => {
   });
 
   it('overwrites previous data', async () => {
-    await saveWorkouts(mockWorkouts);
-    await saveWorkouts([mockWorkouts[0]]);
+    await storage.save(mockWorkouts);
+    await storage.save([mockWorkouts[0]]);
 
-    const result = await loadWorkouts();
+    const result = await storage.load();
     expect(result).toHaveLength(1);
     expect(result[0].name).toBe('Leg Day');
   });
 
   it('saves an empty array', async () => {
-    await saveWorkouts(mockWorkouts);
-    await saveWorkouts([]);
+    await storage.save(mockWorkouts);
+    await storage.save([]);
 
-    const result = await loadWorkouts();
+    const result = await storage.load();
     expect(result).toEqual([]);
   });
 });
