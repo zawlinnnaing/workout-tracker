@@ -1,4 +1,5 @@
-import { ThemedText } from '@/components/ThemedText';
+import { Heading } from '@/components/ui/heading';
+import { Text } from '@/components/ui/text';
 import { ThemedView } from '@/components/ThemedView';
 import { useWorkouts } from '@/contexts/WorkoutContext';
 import { useThemeColor } from '@/hooks/useThemeColor';
@@ -45,11 +46,11 @@ function HomeView({
       onPress={() => onWorkoutPress(item.id)}
     >
       <View style={styles.workoutItemContent}>
-        <ThemedText type="subtitle">{item.name}</ThemedText>
-        <ThemedText style={styles.workoutMeta}>
+        <Heading size="lg">{item.name}</Heading>
+        <Text style={styles.workoutMeta}>
           {item.exercises.length} exercise
           {item.exercises.length !== 1 ? 's' : ''}
-        </ThemedText>
+        </Text>
       </View>
       <Ionicons name="chevron-forward" size={20} color={textColor + '60'} />
     </Pressable>
@@ -59,9 +60,9 @@ function HomeView({
     <SafeAreaView style={[styles.container, { backgroundColor }]}>
       <ThemedView style={styles.content}>
         <View style={styles.header}>
-          <ThemedText type="title">
+          <Heading size="2xl">
             {hasWorkouts ? 'My Workouts' : 'Get Started'}
-          </ThemedText>
+          </Heading>
           {hasWorkouts && (
             <Pressable
               style={[styles.addButton, { backgroundColor: primaryColor }]}
@@ -75,7 +76,10 @@ function HomeView({
         {showInput && (
           <View style={[styles.inputCard, { borderColor: primaryColor }]}>
             <TextInput
-              style={[styles.input, { borderColor: primaryColor, color: textColor }]}
+              style={[
+                styles.input,
+                { borderColor: primaryColor, color: textColor },
+              ]}
               placeholder="Workout name"
               placeholderTextColor={textColor + '80'}
               value={newWorkoutName}
@@ -85,18 +89,25 @@ function HomeView({
             />
             <View style={styles.inputActions}>
               <Pressable
-                style={[styles.inputActionButton, { borderColor: primaryColor }]}
+                style={[
+                  styles.inputActionButton,
+                  { borderColor: primaryColor },
+                ]}
                 onPress={onHideInput}
               >
-                <ThemedText>Cancel</ThemedText>
+                <Text>Cancel</Text>
               </Pressable>
               <Pressable
-                style={[styles.inputActionButton, styles.createButton, { backgroundColor: primaryColor }]}
+                style={[
+                  styles.inputActionButton,
+                  styles.createButton,
+                  { backgroundColor: primaryColor },
+                ]}
                 onPress={onCreateWorkout}
               >
-                <ThemedText style={{ color: backgroundColor, fontWeight: '600' }}>
+                <Text style={{ color: backgroundColor, fontWeight: '600' }}>
                   Create
-                </ThemedText>
+                </Text>
               </Pressable>
             </View>
           </View>
@@ -104,21 +115,25 @@ function HomeView({
 
         {!hasWorkouts && !showInput ? (
           <View style={styles.emptyState}>
-            <Ionicons name="barbell-outline" size={72} color={textColor + '30'} />
-            <ThemedText type="subtitle" style={styles.emptyTitle}>
+            <Ionicons
+              name="barbell-outline"
+              size={72}
+              color={textColor + '30'}
+            />
+            <Heading size="lg" style={styles.emptyTitle}>
               No workouts yet
-            </ThemedText>
-            <ThemedText style={[styles.emptySubtitle, { color: textColor + '80' }]}>
+            </Heading>
+            <Text style={[styles.emptySubtitle, { color: textColor + '80' }]}>
               Create your first workout to get started
-            </ThemedText>
+            </Text>
             <Pressable
               style={[styles.ctaButton, { backgroundColor: primaryColor }]}
               onPress={onShowInput}
             >
               <Ionicons name="add" size={20} color={backgroundColor} />
-              <ThemedText style={{ color: backgroundColor, fontWeight: '600' }}>
+              <Text style={{ color: backgroundColor, fontWeight: '600' }}>
                 Add Workout
-              </ThemedText>
+              </Text>
             </Pressable>
           </View>
         ) : (
@@ -176,6 +191,7 @@ export default withHome(HomeView);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingVertical: 16,
   },
   content: {
     flex: 1,
@@ -185,7 +201,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: 16,
     marginBottom: 20,
   },
   addButton: {

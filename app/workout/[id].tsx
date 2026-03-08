@@ -1,4 +1,5 @@
-import { ThemedText } from '@/components/ThemedText';
+import { Heading } from '@/components/ui/heading';
+import { Text } from '@/components/ui/text';
 import { ThemedView } from '@/components/ThemedView';
 import { useWorkouts } from '@/contexts/WorkoutContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -31,7 +32,7 @@ export default function WorkoutDetailScreen() {
   if (!workout) {
     return (
       <ThemedView className="flex-1">
-        <ThemedText>Workout not found</ThemedText>
+        <Text>Workout not found</Text>
       </ThemedView>
     );
   }
@@ -95,7 +96,7 @@ export default function WorkoutDetailScreen() {
       }}
     >
       <View className="mb-3 flex-row items-center justify-between">
-        <ThemedText type="subtitle">{exercise.name}</ThemedText>
+        <Heading size="lg">{exercise.name}</Heading>
         <Pressable
           onPress={() => handleDeleteExercise(exercise.id, exercise.name)}
         >
@@ -104,29 +105,29 @@ export default function WorkoutDetailScreen() {
       </View>
 
       {exercise.sets.length === 0 ? (
-        <ThemedText className="mb-3 opacity-60">No sets yet</ThemedText>
+        <Text className="mb-3 opacity-60">No sets yet</Text>
       ) : (
         <View className="mb-3">
           <View className="mb-2 flex-row px-1">
-            <ThemedText className="flex-1 text-center text-xs font-semibold opacity-70">
+            <Text className="flex-1 text-center text-xs font-semibold opacity-70">
               Set
-            </ThemedText>
-            <ThemedText className="flex-1 text-center text-xs font-semibold opacity-70">
+            </Text>
+            <Text className="flex-1 text-center text-xs font-semibold opacity-70">
               Reps
-            </ThemedText>
-            <ThemedText className="flex-1 text-center text-xs font-semibold opacity-70">
+            </Text>
+            <Text className="flex-1 text-center text-xs font-semibold opacity-70">
               Weight (kg)
-            </ThemedText>
+            </Text>
             <View className="w-6" />
           </View>
           {exercise.sets.map((set, index) => (
             <View key={set.id} className="mb-2 flex-row items-center gap-2">
-              <ThemedText
+              <Text
                 className="text-center font-semibold"
                 style={{ flex: 0.5 }}
               >
                 {index + 1}
-              </ThemedText>
+              </Text>
               <TextInput
                 className="flex-1 rounded border p-2 text-center text-[#11181C] dark:text-[#ECEDEE]"
                 style={{ borderColor: PRIMARY_COLOR }}
@@ -166,7 +167,7 @@ export default function WorkoutDetailScreen() {
         onPress={() => handleAddSet(exercise.id)}
       >
         <Ionicons name="add" size={20} color={PRIMARY_COLOR} />
-        <ThemedText style={{ color: PRIMARY_COLOR }}>Add Set</ThemedText>
+        <Text style={{ color: PRIMARY_COLOR }}>Add Set</Text>
       </Pressable>
     </View>
   );
@@ -185,10 +186,10 @@ export default function WorkoutDetailScreen() {
           showsVerticalScrollIndicator={false}
         >
           <View className="mb-5">
-            <ThemedText type="title">{workout.name}</ThemedText>
-            <ThemedText className="mt-1 text-xs opacity-60">
+            <Heading size="2xl">{workout.name}</Heading>
+            <Text className="mt-1 text-xs opacity-60">
               Created: {new Date(workout.createdAt).toLocaleDateString()}
-            </ThemedText>
+            </Text>
           </View>
 
           {showAddExercise && (
@@ -215,16 +216,16 @@ export default function WorkoutDetailScreen() {
                     setNewExerciseName('');
                   }}
                 >
-                  <ThemedText>Cancel</ThemedText>
+                  <Text>Cancel</Text>
                 </Pressable>
                 <Pressable
                   className="flex-1 items-center rounded-lg p-3"
                   style={{ backgroundColor: PRIMARY_COLOR }}
                   onPress={handleAddExercise}
                 >
-                  <ThemedText style={{ color: 'white', fontWeight: '600' }}>
+                  <Text style={{ color: 'white', fontWeight: '600' }}>
                     Add
-                  </ThemedText>
+                  </Text>
                 </Pressable>
               </View>
             </View>
@@ -236,11 +237,9 @@ export default function WorkoutDetailScreen() {
             onPress={() => setShowAddExercise(true)}
           >
             <Ionicons name="add" size={20} color="white" />
-            <ThemedText
-              style={{ color: 'white', fontWeight: '600', fontSize: 16 }}
-            >
+            <Text style={{ color: 'white', fontWeight: '600', fontSize: 16 }}>
               Add Exercise
-            </ThemedText>
+            </Text>
           </Pressable>
 
           {workout.exercises.length === 0 ? (
@@ -250,12 +249,10 @@ export default function WorkoutDetailScreen() {
                 size={64}
                 color={textColor + '40'}
               />
-              <ThemedText className="text-lg font-semibold">
-                No exercises yet
-              </ThemedText>
-              <ThemedText className="text-center text-sm opacity-70">
+              <Heading size="md">No exercises yet</Heading>
+              <Text className="text-center text-sm opacity-70">
                 Add your first exercise to get started
-              </ThemedText>
+              </Text>
             </View>
           ) : (
             <View className="gap-4">

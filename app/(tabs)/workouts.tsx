@@ -1,4 +1,5 @@
-import { ThemedText } from '@/components/ThemedText';
+import { Heading } from '@/components/ui/heading';
+import { Text } from '@/components/ui/text';
 import { ThemedView } from '@/components/ThemedView';
 import { useWorkouts } from '@/contexts/WorkoutContext';
 import { useThemeColor } from '@/hooks/useThemeColor';
@@ -57,14 +58,14 @@ export default function WorkoutsScreen() {
       onPress={() => router.push(`/workout/${item.id}`)}
     >
       <View className="flex-1">
-        <ThemedText type="subtitle">{item.name}</ThemedText>
-        <ThemedText className="mt-1 text-sm opacity-70">
+        <Heading size="lg">{item.name}</Heading>
+        <Text className="mt-1 text-sm opacity-70">
           {item.exercises.length} exercise
           {item.exercises.length !== 1 ? 's' : ''}
-        </ThemedText>
-        <ThemedText className="mt-1 text-xs opacity-50">
+        </Text>
+        <Text className="mt-1 text-xs opacity-50">
           {new Date(item.createdAt).toLocaleDateString()}
-        </ThemedText>
+        </Text>
       </View>
       <Pressable
         className="p-2"
@@ -79,7 +80,7 @@ export default function WorkoutsScreen() {
     <SafeAreaView className="flex-1" style={{ backgroundColor }}>
       <ThemedView className="flex-1 px-4">
         <View className="mb-5 mt-4 flex-row items-center justify-between">
-          <ThemedText type="title">My Workouts</ThemedText>
+          <Heading size="2xl">My Workouts</Heading>
           <Pressable
             className="h-10 w-10 items-center justify-center rounded-full"
             style={{ backgroundColor: primaryColor }}
@@ -113,16 +114,16 @@ export default function WorkoutsScreen() {
                   setNewWorkoutName('');
                 }}
               >
-                <ThemedText>Cancel</ThemedText>
+                <Text>Cancel</Text>
               </Pressable>
               <Pressable
                 className="flex-1 items-center rounded-lg p-3"
                 style={{ backgroundColor: primaryColor }}
                 onPress={handleCreateWorkout}
               >
-                <ThemedText style={{ color: backgroundColor, fontWeight: '600' }}>
+                <Text style={{ color: backgroundColor, fontWeight: '600' }}>
                   Create
-                </ThemedText>
+                </Text>
               </Pressable>
             </View>
           </View>
@@ -135,12 +136,10 @@ export default function WorkoutsScreen() {
               size={64}
               color={textColor + '40'}
             />
-            <ThemedText className="text-lg font-semibold">
-              No workouts yet
-            </ThemedText>
-            <ThemedText className="text-center text-sm opacity-70">
+            <Heading size="md">No workouts yet</Heading>
+            <Text className="text-center text-sm opacity-70">
               Tap the + button to create your first workout
-            </ThemedText>
+            </Text>
           </View>
         ) : (
           <FlatList
