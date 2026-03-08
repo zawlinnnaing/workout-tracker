@@ -10,6 +10,7 @@
   - [3.1 Workout Management](#31-workout-management)
   - [3.2 Exercise Management](#32-exercise-management)
   - [3.3 Set Management](#33-set-management)
+- [3.4 Local Storage](#34-local-storage)
 - [4. Screens](#4-screens)
   - [Home Screen](#home-screen)
   - [Workout Detail Screen](#workout-detail-screen)
@@ -131,6 +132,29 @@ Capabilities
 - edit reps
 - edit weight
 - delete set
+
+---
+
+### 3.4 Local Storage
+
+All user-created data is persisted to device local storage so it survives app restarts.
+
+Scope
+
+- workouts (name, order)
+- exercises (name, order, parent workout)
+- sets (reps, weight, parent exercise)
+- completion state for workouts, exercises, and sets
+
+Behavior
+
+- data is loaded from storage on app launch
+- any create, edit, delete, or reorder action is immediately written to storage
+- completion state changes (set checked, restart routine) are immediately written to storage
+
+Storage technology
+
+- `AsyncStorage` via `@react-native-async-storage/async-storage`
 
 ---
 
