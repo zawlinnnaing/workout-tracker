@@ -1,5 +1,7 @@
 import { Text, type TextProps } from 'react-native';
 
+import { useColorScheme } from '@/hooks/useColorScheme';
+
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
   darkColor?: string;
@@ -17,15 +19,18 @@ const typeClassNames: Record<NonNullable<ThemedTextProps['type']>, string> = {
 export function ThemedText({
   className = '',
   style,
-  lightColor: _lightColor,
-  darkColor: _darkColor,
+  lightColor,
+  darkColor,
   type = 'default',
   ...rest
 }: ThemedTextProps) {
+  const colorScheme = useColorScheme();
+  const color = colorScheme === 'dark' ? (darkColor ?? '#ECEDEE') : (lightColor ?? '#11181C');
+
   return (
     <Text
-      className={`text-[#11181C] dark:text-[#ECEDEE] ${typeClassNames[type]} ${className}`}
-      style={style}
+      className={`${typeClassNames[type]} ${className}`}
+      style={[{ color }, style]}
       {...rest}
     />
   );

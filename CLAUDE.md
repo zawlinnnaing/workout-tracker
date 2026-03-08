@@ -69,7 +69,7 @@ function WorkoutCard({ id }: { id: string }) {
 
 ## Styling
 
-Use `StyleSheet.create` for all styles. No inline style objects except for dynamic values that depend on props/state (e.g., `{ backgroundColor: primaryColor }`).
+Use NativeWind(TailwindCSS) for all styling. No inline style objects except for dynamic values that depend on props/state (e.g., `{ backgroundColor: primaryColor }`).
 
 ## Theming
 

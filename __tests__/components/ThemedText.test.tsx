@@ -4,7 +4,7 @@ import React from 'react';
 import { ThemedText } from '@/components/ThemedText';
 
 // Provide a stable color scheme so tests don't depend on the system setting
-jest.mock('@/hooks/use-color-scheme', () => ({
+jest.mock('@/hooks/useColorScheme', () => ({
   useColorScheme: () => 'light',
 }));
 
@@ -17,10 +17,8 @@ describe('ThemedText', () => {
   it('applies the default type by default', () => {
     render(<ThemedText testID="text">Default</ThemedText>);
     const element = screen.getByTestId('text');
-    const style = element.props.style as object[];
-    const flatStyle = Object.assign({}, ...style.filter(Boolean));
-    expect(flatStyle.fontSize).toBe(16);
-    expect(flatStyle.lineHeight).toBe(24);
+    expect(element.props.className).toContain('text-base');
+    expect(element.props.className).toContain('leading-6');
   });
 
   it('applies the title type', () => {
@@ -30,10 +28,8 @@ describe('ThemedText', () => {
       </ThemedText>,
     );
     const element = screen.getByTestId('text');
-    const style = element.props.style as object[];
-    const flatStyle = Object.assign({}, ...style.filter(Boolean));
-    expect(flatStyle.fontSize).toBe(32);
-    expect(flatStyle.fontWeight).toBe('bold');
+    expect(element.props.className).toContain('text-[32px]');
+    expect(element.props.className).toContain('font-bold');
   });
 
   it('applies the defaultSemiBold type', () => {
@@ -43,9 +39,7 @@ describe('ThemedText', () => {
       </ThemedText>,
     );
     const element = screen.getByTestId('text');
-    const style = element.props.style as object[];
-    const flatStyle = Object.assign({}, ...style.filter(Boolean));
-    expect(flatStyle.fontWeight).toBe('600');
+    expect(element.props.className).toContain('font-semibold');
   });
 
   it('applies the subtitle type', () => {
@@ -55,9 +49,7 @@ describe('ThemedText', () => {
       </ThemedText>,
     );
     const element = screen.getByTestId('text');
-    const style = element.props.style as object[];
-    const flatStyle = Object.assign({}, ...style.filter(Boolean));
-    expect(flatStyle.fontSize).toBeDefined();
+    expect(element.props.className).toContain('text-xl');
   });
 
   it('applies the link type', () => {

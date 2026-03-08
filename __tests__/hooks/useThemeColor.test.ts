@@ -5,7 +5,7 @@ import { useThemeColor } from '@/hooks/useThemeColor';
 
 const mockUseColorScheme = jest.fn();
 
-jest.mock('@/hooks/use-color-scheme', () => ({
+jest.mock('@/hooks/useColorScheme', () => ({
   useColorScheme: () => mockUseColorScheme(),
 }));
 
