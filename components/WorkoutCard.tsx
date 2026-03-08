@@ -1,7 +1,6 @@
 import { Card } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
-import { useThemeColor } from '@/hooks/useThemeColor';
 import { Workout } from '@/types/workout';
 import { Ionicons } from '@expo/vector-icons';
 import { Pressable, View } from 'react-native';
@@ -13,21 +12,10 @@ interface WorkoutCardProps {
 }
 
 export function WorkoutCard({ workout, onPress, onDelete }: WorkoutCardProps) {
-  const backgroundColor = useThemeColor({}, 'background');
-
   return (
     <Card>
       <Pressable
         className="flex-row items-center justify-between"
-        style={({ pressed }) => ({
-          opacity: pressed ? 0.7 : 1,
-          backgroundColor,
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.1,
-          shadowRadius: 4,
-          elevation: 3,
-        })}
         onPress={onPress}
       >
         <View className="flex-1">
