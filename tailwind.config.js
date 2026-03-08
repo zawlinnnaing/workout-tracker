@@ -32,6 +32,7 @@ module.exports = {
           800: 'rgb(var(--color-primary-800)/<alpha-value>)',
           900: 'rgb(var(--color-primary-900)/<alpha-value>)',
           950: 'rgb(var(--color-primary-950)/<alpha-value>)',
+          DEFAULT: 'rgb(var(--color-primary-default)/<alpha-value>)',
         },
         secondary: {
           0: 'rgb(var(--color-secondary-0)/<alpha-value>)',
@@ -46,6 +47,7 @@ module.exports = {
           800: 'rgb(var(--color-secondary-800)/<alpha-value>)',
           900: 'rgb(var(--color-secondary-900)/<alpha-value>)',
           950: 'rgb(var(--color-secondary-950)/<alpha-value>)',
+          DEFAULT: 'rgb(var(--color-secondary-default)/<alpha-value>)',
         },
         tertiary: {
           50: 'rgb(var(--color-tertiary-50)/<alpha-value>)',
@@ -146,6 +148,7 @@ module.exports = {
           800: 'rgb(var(--color-outline-800)/<alpha-value>)',
           900: 'rgb(var(--color-outline-900)/<alpha-value>)',
           950: 'rgb(var(--color-outline-950)/<alpha-value>)',
+          DEFAULT: 'rgb(var(--color-outline-500)/<alpha-value>)',
         },
         background: {
           0: 'rgb(var(--color-background-0)/<alpha-value>)',

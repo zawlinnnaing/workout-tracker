@@ -15,6 +15,7 @@ export const config = {
     '--color-primary-800': '13 13 13',
     '--color-primary-900': '10 10 10',
     '--color-primary-950': '8 8 8',
+    '--color-primary-default': '0 0 0',
 
     /* Secondary  */
     '--color-secondary-0': '253 253 253',
@@ -29,6 +30,7 @@ export const config = {
     '--color-secondary-800': '177 177 177',
     '--color-secondary-900': '165 164 164',
     '--color-secondary-950': '157 157 157',
+    '--color-secondary-default': '255 255 255',
 
     /* Tertiary */
     '--color-tertiary-0': '255 250 245',
@@ -155,6 +157,7 @@ export const config = {
     '--color-indicator-error': '185 28 28',
   }),
   dark: vars({
+    '--color-primary-default': '255 255 255',
     '--color-primary-0': '166 166 166',
     '--color-primary-50': '175 175 175',
     '--color-primary-100': '186 186 186',
