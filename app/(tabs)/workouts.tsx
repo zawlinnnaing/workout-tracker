@@ -5,7 +5,7 @@ import { Text } from '@/components/ui/text';
 import { useWorkouts } from '@/contexts/WorkoutContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Workout } from '@/types/workout';
-import { Ionicons } from '@expo/vector-icons';
+import { Plus, Dumbbell } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Input, InputField } from '@/components/ui/input';
@@ -63,7 +63,7 @@ export default function WorkoutsScreen() {
             className="h-10 w-10 items-center justify-center rounded-full bg-primary"
             onPress={() => setShowNewWorkoutInput(true)}
           >
-            <Ionicons name="add" size={24} color={iconOnPrimaryColor} />
+            <Plus size={24} color={iconOnPrimaryColor} />
           </Pressable>
         </View>
 
@@ -102,11 +102,7 @@ export default function WorkoutsScreen() {
 
         {workouts.length === 0 ? (
           <View className="flex-1 items-center justify-center gap-3">
-            <Ionicons
-              name="barbell-outline"
-              size={64}
-              color={mutedColor}
-            />
+            <Dumbbell size={64} color={mutedColor} />
             <Heading size="md">No workouts yet</Heading>
             <Text className="text-center text-sm opacity-70">
               Tap the + button to create your first workout

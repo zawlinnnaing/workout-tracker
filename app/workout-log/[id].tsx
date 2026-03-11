@@ -4,7 +4,7 @@ import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
 import { useWorkoutLogs, useWorkouts } from '@/contexts/WorkoutContext';
 import { Exercise, ExerciseLog, Workout, WorkoutLog } from '@/types/workout';
-import { Ionicons } from '@expo/vector-icons';
+import { CheckSquare, Square, Dumbbell } from 'lucide-react-native';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { Pressable, ScrollView, View } from 'react-native';
 
@@ -40,12 +40,11 @@ function ExerciseRow({
         style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
         onPress={onComplete}
       >
-        <Ionicons
-          name={isCompleted ? 'checkbox' : 'square-outline'}
-          size={26}
-          color={isCompleted ? '#6C63FF' : '#9BA1A6'}
-          style={{ marginRight: 12 }}
-        />
+        {isCompleted ? (
+          <CheckSquare size={26} color="#6C63FF" style={{ marginRight: 12 }} />
+        ) : (
+          <Square size={26} color="#9BA1A6" style={{ marginRight: 12 }} />
+        )}
         <View className="flex-1 gap-1">
           <Heading
             size="md"
@@ -96,11 +95,7 @@ function WorkoutLogView({
 
           {workout.exercises.length === 0 ? (
             <View className="mt-10 items-center gap-3">
-              <Ionicons
-                name="fitness-outline"
-                size={64}
-                color="#9BA1A6"
-              />
+              <Dumbbell size={64} color="#9BA1A6" />
               <Heading size="md">No exercises yet</Heading>
               <Text className="text-center text-sm opacity-70">
                 Add exercises in the Workouts tab

@@ -2,7 +2,7 @@ import { Card } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
 import { Workout } from '@/types/workout';
-import { Ionicons } from '@expo/vector-icons';
+import { Trash2 } from 'lucide-react-native';
 import { Pressable, View } from 'react-native';
 
 interface WorkoutCardProps {
@@ -29,7 +29,7 @@ export function WorkoutCard({ workout, onPress, onDelete }: WorkoutCardProps) {
           </Text>
         </View>
         <Pressable className="p-2" onPress={onDelete} testID="delete-button">
-          <Ionicons name="trash-outline" size={24} color="red" />
+          <Trash2 size={24} color="red" />
         </Pressable>
       </Pressable>
     </Card>

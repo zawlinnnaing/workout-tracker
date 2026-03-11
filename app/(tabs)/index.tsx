@@ -4,7 +4,14 @@ import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
 import { useWorkoutLogs, useWorkouts } from '@/contexts/WorkoutContext';
 import { Workout, WorkoutLog } from '@/types/workout';
-import { Ionicons } from '@expo/vector-icons';
+import {
+  CheckSquare,
+  Square,
+  ChevronRight,
+  RotateCcw,
+  Plus,
+  Dumbbell,
+} from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import { FlatList, Pressable, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -47,11 +54,11 @@ function HomeView({
             className="mr-3"
             hitSlop={8}
           >
-            <Ionicons
-              name={isCompleted ? 'checkbox' : 'square-outline'}
-              size={26}
-              color={isCompleted ? '#6C63FF' : '#9BA1A6'}
-            />
+            {isCompleted ? (
+              <CheckSquare size={26} color="#6C63FF" />
+            ) : (
+              <Square size={26} color="#9BA1A6" />
+            )}
           </Pressable>
           <View className="flex-1 gap-1">
             <Heading
@@ -65,7 +72,7 @@ function HomeView({
               {item.exercises.length !== 1 ? 's' : ''}
             </Text>
           </View>
-          <Ionicons name="chevron-forward" size={20} className="text-muted" />
+          <ChevronRight size={20} color="#9BA1A6" />
         </Card>
       </Pressable>
     );
@@ -85,7 +92,7 @@ function HomeView({
                 className="h-10 w-10 items-center justify-center rounded-full bg-background-100"
                 onPress={onRestartRoutine}
               >
-                <Ionicons name="refresh-outline" size={20} color="#6C63FF" />
+                <RotateCcw size={20} color="#6C63FF" />
               </Pressable>
             )}
             {hasWorkouts && (
@@ -94,7 +101,7 @@ function HomeView({
                 className="bg-primary h-10 w-10 items-center justify-center rounded-full"
                 onPress={onAddWorkout}
               >
-                <Ionicons name="add" size={24} className="text-white" />
+                <Plus size={24} color="white" />
               </Pressable>
             )}
           </View>
@@ -102,7 +109,7 @@ function HomeView({
 
         {!hasWorkouts ? (
           <View className="flex-1 items-center justify-center gap-3">
-            <Ionicons name="barbell-outline" size={72} className="text-muted" />
+            <Dumbbell size={72} color="#9BA1A6" />
             <Heading size="lg" className="mt-2">
               No workouts yet
             </Heading>
@@ -113,7 +120,7 @@ function HomeView({
               className="bg-primary mt-2 flex-row items-center gap-2 rounded-xl px-6 py-3.5"
               onPress={onAddWorkout}
             >
-              <Ionicons name="add" size={20} className="text-primary" />
+              <Plus size={20} color="white" />
               <Text className="font-semibold text-secondary-0">
                 Add Workout
               </Text>

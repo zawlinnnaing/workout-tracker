@@ -6,7 +6,7 @@ import { Text } from '@/components/ui/text';
 import { useWorkouts } from '@/contexts/WorkoutContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Exercise } from '@/types/workout';
-import { Ionicons } from '@expo/vector-icons';
+import { Trash2, Plus, Dumbbell } from 'lucide-react-native';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { Alert, Pressable, ScrollView, View } from 'react-native';
@@ -124,7 +124,7 @@ export default function WorkoutDetailScreen() {
         <Pressable
           onPress={() => handleDeleteExercise(exercise.id, exercise.name)}
         >
-          <Ionicons name="trash-outline" size={20} color="red" />
+          <Trash2 size={20} color="red" />
         </Pressable>
       </View>
 
@@ -259,7 +259,7 @@ export default function WorkoutDetailScreen() {
             className="mb-5 flex-row items-center justify-center gap-2 rounded-xl bg-primary p-4"
             onPress={() => setShowAddExercise(true)}
           >
-            <Ionicons name="add" size={20} color="white" />
+            <Plus size={20} color="white" />
             <Text style={{ color: 'white', fontWeight: '600', fontSize: 16 }}>
               Add Exercise
             </Text>
@@ -267,11 +267,7 @@ export default function WorkoutDetailScreen() {
 
           {workout.exercises.length === 0 ? (
             <View className="mt-10 items-center gap-3">
-              <Ionicons
-                name="fitness-outline"
-                size={64}
-                color={textColor + '40'}
-              />
+              <Dumbbell size={64} color={textColor + '40'} />
               <Heading size="md">No exercises yet</Heading>
               <Text className="text-center text-sm opacity-70">
                 Add your first exercise to get started
