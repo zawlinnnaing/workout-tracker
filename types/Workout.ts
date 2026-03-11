@@ -13,3 +13,16 @@ export interface Workout {
   createdAt: Date;
   completedAt?: Date;
 }
+
+export interface ExerciseLog {
+  id: string;
+  exercise: Exercise;
+  completedAt?: Date;
+}
+
+export interface WorkoutLog {
+  id: string;
+  workout: Workout;
+  exercises: ExerciseLog[];
+  completedAt?: Date;
+}

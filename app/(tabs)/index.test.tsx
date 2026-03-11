@@ -12,9 +12,19 @@ jest.mock('expo-router', () => ({
 }));
 
 const mockWorkouts: { id: string; name: string; exercises: never[]; createdAt: Date }[] = [];
+const mockWorkoutLogs: Record<string, unknown> = {};
+const mockToggleWorkoutComplete = jest.fn();
+const mockRestartRoutine = jest.fn();
+
 jest.mock('@/contexts/WorkoutContext', () => ({
   useWorkouts: () => ({ workouts: mockWorkouts }),
+  useWorkoutLogs: () => ({
+    workoutLogs: mockWorkoutLogs,
+    toggleWorkoutComplete: mockToggleWorkoutComplete,
+    restartRoutine: mockRestartRoutine,
+  }),
   WorkoutProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  WorkoutLogProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
 // Import after mocks
@@ -29,7 +39,10 @@ describe('HomeScreen', () => {
   beforeEach(() => {
     mockNavigate.mockClear();
     mockPush.mockClear();
+    mockToggleWorkoutComplete.mockClear();
+    mockRestartRoutine.mockClear();
     mockWorkouts.length = 0;
+    Object.keys(mockWorkoutLogs).forEach((k) => delete mockWorkoutLogs[k]);
   });
 
   describe('empty state', () => {
@@ -79,6 +92,44 @@ describe('HomeScreen', () => {
       renderHome();
       fireEvent.press(screen.getByTestId('header-add-button'));
       expect(mockNavigate).toHaveBeenCalledWith('/(tabs)/workouts');
+    });
+
+    it('navigates to workout-log screen when workout row is pressed', () => {
+      renderHome();
+      fireEvent.press(screen.getByText('Push Day'));
+      expect(mockPush).toHaveBeenCalledWith('/workout-log/1');
+    });
+
+    it('calls toggleWorkoutComplete when checkbox is pressed', () => {
+      renderHome();
+      fireEvent.press(screen.getByTestId('checkbox-1'));
+      expect(mockToggleWorkoutComplete).toHaveBeenCalledWith(
+        expect.objectContaining({ id: '1', name: 'Push Day' }),
+      );
+    });
+
+    it('does not show restart button when no progress', () => {
+      renderHome();
+      expect(screen.queryByTestId('restart-button')).toBeNull();
+    });
+
+    it('shows restart button when a workout has progress', () => {
+      mockWorkoutLogs['1'] = {
+        completedAt: new Date(),
+        exercises: [],
+      };
+      renderHome();
+      expect(screen.getByTestId('restart-button')).toBeTruthy();
+    });
+
+    it('calls restartRoutine when restart button is pressed', () => {
+      mockWorkoutLogs['1'] = {
+        completedAt: new Date(),
+        exercises: [],
+      };
+      renderHome();
+      fireEvent.press(screen.getByTestId('restart-button'));
+      expect(mockRestartRoutine).toHaveBeenCalled();
     });
   });
 });
