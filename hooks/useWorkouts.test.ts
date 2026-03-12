@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react-native';
 
-import { useWorkouts } from '@/contexts/WorkoutContext';
+import { useWorkouts } from '@/hooks/useWorkouts';
 import { useWorkoutStore } from '@/store/workoutStore';
 
 beforeEach(() => {

@@ -16,14 +16,20 @@ const mockWorkoutLogs: Record<string, unknown> = {};
 const mockToggleWorkoutComplete = jest.fn();
 const mockRestartRoutine = jest.fn();
 
-jest.mock('@/contexts/WorkoutContext', () => ({
+jest.mock('@/hooks/useWorkouts', () => ({
   useWorkouts: () => ({ workouts: mockWorkouts }),
+}));
+jest.mock('@/hooks/useWorkoutLogs', () => ({
   useWorkoutLogs: () => ({
     workoutLogs: mockWorkoutLogs,
     toggleWorkoutComplete: mockToggleWorkoutComplete,
     restartRoutine: mockRestartRoutine,
   }),
+}));
+jest.mock('@/providers/WorkoutProvider', () => ({
   WorkoutProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
+jest.mock('@/providers/WorkoutLogProvider', () => ({
   WorkoutLogProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 

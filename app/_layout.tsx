@@ -7,7 +7,8 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
-import { WorkoutLogProvider, WorkoutProvider } from '@/contexts/WorkoutContext';
+import { WorkoutLogProvider } from '@/providers/WorkoutLogProvider';
+import { WorkoutProvider } from '@/providers/WorkoutProvider';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';

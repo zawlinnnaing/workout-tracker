@@ -2,7 +2,8 @@ import { ThemedView } from '@/components/ThemedView';
 import { Card } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
-import { useWorkoutLogs, useWorkouts } from '@/contexts/WorkoutContext';
+import { useWorkoutLogs } from '@/hooks/useWorkoutLogs';
+import { useWorkouts } from '@/hooks/useWorkouts';
 import { Workout, WorkoutLog } from '@/types/workout';
 import { useRouter } from 'expo-router';
 import {

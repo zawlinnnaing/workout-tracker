@@ -30,8 +30,10 @@ const mockCompleteSet = jest.fn();
 const mockGetLog = jest.fn(() => mockLog);
 const mockGetWorkoutById = jest.fn(() => mockWorkout);
 
-jest.mock('@/contexts/WorkoutContext', () => ({
+jest.mock('@/hooks/useWorkouts', () => ({
   useWorkouts: () => ({ getWorkoutById: mockGetWorkoutById }),
+}));
+jest.mock('@/hooks/useWorkoutLogs', () => ({
   useWorkoutLogs: () => ({
     workoutLogs: {},
     getLog: mockGetLog,

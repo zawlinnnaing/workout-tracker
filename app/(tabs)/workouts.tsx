@@ -2,7 +2,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { WorkoutCard } from '@/components/WorkoutCard';
 import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
-import { useWorkouts } from '@/contexts/WorkoutContext';
+import { useWorkouts } from '@/hooks/useWorkouts';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Workout } from '@/types/workout';
 import { Plus, Dumbbell } from 'lucide-react-native';

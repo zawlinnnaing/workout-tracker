@@ -9,7 +9,8 @@ import {
 } from '@/components/ui/accordion';
 import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
-import { useWorkoutLogs, useWorkouts } from '@/contexts/WorkoutContext';
+import { useWorkoutLogs } from '@/hooks/useWorkoutLogs';
+import { useWorkouts } from '@/hooks/useWorkouts';
 import {
   Exercise,
   ExerciseLog,

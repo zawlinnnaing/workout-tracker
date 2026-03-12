@@ -3,7 +3,7 @@ import { Card } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
 import { Input, InputField } from '@/components/ui/input';
 import { Text } from '@/components/ui/text';
-import { useWorkouts } from '@/contexts/WorkoutContext';
+import { useWorkouts } from '@/hooks/useWorkouts';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Exercise } from '@/types/workout';
 import { Trash2, Plus, Dumbbell } from 'lucide-react-native';
