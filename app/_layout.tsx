@@ -7,6 +7,7 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
+import { WorkoutHistoryProvider } from '@/providers/WorkoutHistoryProvider';
 import { WorkoutLogProvider } from '@/providers/WorkoutLogProvider';
 import { WorkoutProvider } from '@/providers/WorkoutProvider';
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -25,6 +26,7 @@ export default function RootLayout() {
     <GluestackUIProvider mode="system">
       <WorkoutProvider>
         <WorkoutLogProvider>
+        <WorkoutHistoryProvider>
         <ThemeProvider
           value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
         >
@@ -39,6 +41,7 @@ export default function RootLayout() {
           </Stack>
           <StatusBar style="auto" />
         </ThemeProvider>
+        </WorkoutHistoryProvider>
         </WorkoutLogProvider>
       </WorkoutProvider>
     </GluestackUIProvider>
