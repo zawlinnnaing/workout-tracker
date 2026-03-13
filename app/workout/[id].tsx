@@ -1,12 +1,12 @@
+import { Dumbbell, Plus, Trash2 } from '@/components/icons';
 import { ThemedView } from '@/components/ThemedView';
 import { Card } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
 import { Input, InputField } from '@/components/ui/input';
 import { Text } from '@/components/ui/text';
-import { useWorkouts } from '@/hooks/useWorkouts';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { useWorkouts } from '@/hooks/useWorkouts';
 import { Exercise } from '@/types/workout';
-import { Trash2, Plus, Dumbbell } from 'lucide-react-native';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { Alert, Pressable, ScrollView, View } from 'react-native';
@@ -197,13 +197,17 @@ export default function WorkoutDetailScreen() {
                   style={{ fontSize: 24, fontWeight: 'bold' }}
                   onBlur={() => {
                     if (workoutNameInput.trim()) {
-                      updateWorkout(workout.id, { name: workoutNameInput.trim() });
+                      updateWorkout(workout.id, {
+                        name: workoutNameInput.trim(),
+                      });
                     }
                     setEditingWorkoutName(false);
                   }}
                   onSubmitEditing={() => {
                     if (workoutNameInput.trim()) {
-                      updateWorkout(workout.id, { name: workoutNameInput.trim() });
+                      updateWorkout(workout.id, {
+                        name: workoutNameInput.trim(),
+                      });
                     }
                     setEditingWorkoutName(false);
                   }}
@@ -246,10 +250,10 @@ export default function WorkoutDetailScreen() {
                   <Text>Cancel</Text>
                 </Pressable>
                 <Pressable
-                  className="bg-primary flex-1 items-center rounded-lg p-3"
+                  className="flex-1 items-center rounded-lg bg-primary p-3"
                   onPress={handleAddExercise}
                 >
-                  <Text style={{ color: 'white', fontWeight: '600' }}>Add</Text>
+                  <Text onPrimary>Add</Text>
                 </Pressable>
               </View>
             </Card>
@@ -259,10 +263,8 @@ export default function WorkoutDetailScreen() {
             className="mb-5 flex-row items-center justify-center gap-2 rounded-xl bg-primary p-4"
             onPress={() => setShowAddExercise(true)}
           >
-            <Plus size={20} color="white" />
-            <Text style={{ color: 'white', fontWeight: '600', fontSize: 16 }}>
-              Add Exercise
-            </Text>
+            <Plus size={20} />
+            <Text onPrimary>Add Exercise</Text>
           </Pressable>
 
           {workout.exercises.length === 0 ? (

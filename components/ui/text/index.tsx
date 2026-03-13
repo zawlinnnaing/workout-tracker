@@ -21,7 +21,7 @@ const Text = React.forwardRef<React.ComponentRef<typeof RNText>, ITextProps>(
       highlight,
       ...props
     },
-    ref
+    ref,
   ) {
     return (
       <RNText
@@ -35,12 +35,13 @@ const Text = React.forwardRef<React.ComponentRef<typeof RNText>, ITextProps>(
           italic: italic as boolean,
           highlight: highlight as boolean,
           class: className,
+          onPrimary: props.onPrimary,
         })}
         {...props}
         ref={ref}
       />
     );
-  }
+  },
 );
 
 Text.displayName = 'Text';

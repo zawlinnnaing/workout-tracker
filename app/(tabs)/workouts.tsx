@@ -1,14 +1,15 @@
 import { ThemedView } from '@/components/ThemedView';
 import { WorkoutCard } from '@/components/WorkoutCard';
+import { Dumbbell } from '@/components/icons';
 import { Heading } from '@/components/ui/heading';
-import { Text } from '@/components/ui/text';
-import { useWorkouts } from '@/hooks/useWorkouts';
-import { useColorScheme } from '@/hooks/useColorScheme';
-import { Workout } from '@/types/workout';
-import { Plus, Dumbbell } from 'lucide-react-native';
-import { useRouter } from 'expo-router';
-import { useState } from 'react';
 import { Input, InputField } from '@/components/ui/input';
+import { Text } from '@/components/ui/text';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { useWorkouts } from '@/hooks/useWorkouts';
+import { Workout } from '@/types/workout';
+import { useRouter } from 'expo-router';
+import { Plus } from 'lucide-react-native';
+import { useState } from 'react';
 import { Alert, FlatList, Pressable, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -20,7 +21,6 @@ export default function WorkoutsScreen() {
 
   const colorScheme = useColorScheme() ?? 'light';
   const iconOnPrimaryColor = colorScheme === 'dark' ? '#000000' : '#ffffff';
-  const mutedColor = colorScheme === 'dark' ? '#ffffff40' : '#00000040';
 
   const handleCreateWorkout = () => {
     if (newWorkoutName.trim()) {
@@ -92,9 +92,7 @@ export default function WorkoutsScreen() {
                 className="flex-1 items-center rounded-lg bg-primary p-3"
                 onPress={handleCreateWorkout}
               >
-                <Text className="font-semibold text-secondary-0">
-                  Create
-                </Text>
+                <Text className="font-semibold text-secondary-0">Create</Text>
               </Pressable>
             </View>
           </View>
@@ -102,7 +100,9 @@ export default function WorkoutsScreen() {
 
         {workouts.length === 0 ? (
           <View className="flex-1 items-center justify-center gap-3">
-            <Dumbbell size={64} color={mutedColor} />
+            <Text className="text-red">
+              <Dumbbell size={64} className="text-primary" />
+            </Text>
             <Heading size="md">No workouts yet</Heading>
             <Text className="text-center text-sm opacity-70">
               Tap the + button to create your first workout

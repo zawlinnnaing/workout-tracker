@@ -2,7 +2,7 @@ import { Card } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
 import { Workout } from '@/types/workout';
-import { Trash2 } from 'lucide-react-native';
+import { Trash2 } from '@/components/icons';
 import { Pressable, View } from 'react-native';
 
 interface WorkoutCardProps {

@@ -186,6 +186,7 @@ export const config = {
     '--color-secondary-800': '135 135 135',
     '--color-secondary-900': '150 150 150',
     '--color-secondary-950': '164 164 164',
+    '--color-secondary-default': '0 0 0',
 
     /* Tertiary */
     '--color-tertiary-0': '84 49 18',

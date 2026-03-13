@@ -1,3 +1,4 @@
+import { Dumbbell } from '@/components/icons';
 import { ThemedView } from '@/components/ThemedView';
 import { Card } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
@@ -6,15 +7,8 @@ import { useWorkoutLogs } from '@/hooks/useWorkoutLogs';
 import { useWorkouts } from '@/hooks/useWorkouts';
 import { Workout, WorkoutLog } from '@/types/workout';
 import { useRouter } from 'expo-router';
-import {
-  ChevronRight,
-  Dumbbell,
-  Plus,
-  RotateCcw,
-  Square,
-  SquareCheck,
-} from 'lucide-react-native';
-import { FlatList, Pressable, View } from 'react-native';
+import { ChevronRight, Plus, Square, SquareCheck } from 'lucide-react-native';
+import { Alert, FlatList, Pressable, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface HomeViewProps {
@@ -37,6 +31,36 @@ function HomeView({
   const hasWorkouts = workouts.length > 0;
   const hasAnyProgress = Object.values(workoutLogs).some(
     (log) => log.completedAt || log.exercises.some((e) => !!e.completedAt),
+  );
+
+  const handleRestartRoutine = () => {
+    Alert.alert(
+      'Reset Workout Logs',
+      'Are you sure you want to reset all workout logs?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Reset',
+          style: 'destructive',
+          onPress: () => onRestartRoutine(),
+        },
+      ],
+    );
+  };
+
+  const renderFooter = () => (
+    <Pressable
+      testID="restart-button"
+      className="mt-1 items-center rounded-lg bg-primary py-3 disabled:opacity-20"
+      style={({ pressed }) => ({ opacity: pressed ? 0.8 : 1 })}
+      onPress={handleRestartRoutine}
+      disabled={!hasAnyProgress}
+    >
+      <Text className="font-semibold text-secondary-0">Reset</Text>
+    </Pressable>
   );
 
   const renderWorkoutItem = ({ item }: { item: Workout }) => {
@@ -83,15 +107,6 @@ function HomeView({
             {hasWorkouts ? 'My Workouts' : 'Get Started'}
           </Heading>
           <View className="flex-row items-center gap-2">
-            {hasAnyProgress && (
-              <Pressable
-                testID="restart-button"
-                className="h-10 w-10 items-center justify-center rounded-full bg-background-100 text-primary"
-                onPress={onRestartRoutine}
-              >
-                <RotateCcw size={20} />
-              </Pressable>
-            )}
             {hasWorkouts && (
               <Pressable
                 testID="header-add-button"
@@ -106,7 +121,7 @@ function HomeView({
 
         {!hasWorkouts ? (
           <View className="flex-1 items-center justify-center gap-3">
-            <Dumbbell size={72} color="#9BA1A6" />
+            <Dumbbell size={72} />
             <Heading size="lg" className="mt-2">
               No workouts yet
             </Heading>
@@ -130,6 +145,7 @@ function HomeView({
             keyExtractor={(item) => item.id}
             contentContainerStyle={{ gap: 12 }}
             showsVerticalScrollIndicator={false}
+            ListFooterComponent={renderFooter}
           />
         )}
       </ThemedView>

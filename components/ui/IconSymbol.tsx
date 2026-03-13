@@ -1,14 +1,7 @@
-import {
-  Dumbbell,
-  Home,
-  LucideIcon,
-  ChevronRight,
-  Send,
-  Code,
-} from 'lucide-react-native';
+import { ChevronRight, Code, Dumbbell, Home, Send } from '@/components/icons';
 import { OpaqueColorValue, type StyleProp, type ViewStyle } from 'react-native';
 
-const MAPPING: Record<string, LucideIcon> = {
+const MAPPING = {
   'house.fill': Home,
   'figure.strengthtraining.traditional': Dumbbell,
   'paperplane.fill': Send,
