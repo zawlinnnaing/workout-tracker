@@ -42,7 +42,7 @@ export function SideDrawer({ isOpen, onClose, onNavigate }: SideDrawerProps) {
       <SafeAreaView testID="drawer-panel" className="w-72 bg-background-0">
         <View className="flex-1 px-6 py-8">
           <View className="mb-10 mt-4">
-            <Text className="text-3xl font-bold italic tracking-wider text-primary">
+            <Text className="text-3xl font-bold tracking-wider text-primary">
               KINETIC
             </Text>
           </View>

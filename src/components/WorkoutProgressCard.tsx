@@ -1,9 +1,9 @@
+import CheckIcon from '@/components/icons/CheckIcon';
 import { Card } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
 import { Workout, WorkoutLog } from '@/types/workout';
 import { cn } from '@/utils/styles';
-import { CheckIcon } from 'lucide-react-native';
 import React from 'react';
 import { Pressable, View } from 'react-native';
 
@@ -41,7 +41,9 @@ export function WorkoutProgressCard({
             hitSlop={8}
             className={cn(
               'h-7 w-7 items-center justify-center rounded-md',
-              isCompleted ? 'bg-primary' : 'border-2 border-primary',
+              isCompleted
+                ? 'bg-primary text-secondary'
+                : 'border-2 border-primary',
             )}
           >
             {isCompleted ? (
