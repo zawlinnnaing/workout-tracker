@@ -3,9 +3,15 @@ import History from '@/components/icons/History';
 import ListChecks from '@/components/icons/ListChecks';
 import Settings from '@/components/icons/Settings';
 import User from '@/components/icons/User';
+import {
+  Drawer,
+  DrawerBackdrop,
+  DrawerBody,
+  DrawerContent,
+  DrawerFooter,
+} from '@/components/ui/drawer';
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 type NavRoute = '/(tabs)/index' | '/(tabs)/workouts';
 
@@ -30,17 +36,11 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 export function SideDrawer({ isOpen, onClose, onNavigate }: SideDrawerProps) {
-  if (!isOpen) return null;
-
   return (
-    <View className="absolute inset-0 z-50 flex-row">
-      <Pressable
-        testID="drawer-backdrop"
-        className="absolute inset-0 bg-black/60"
-        onPress={onClose}
-      />
-      <SafeAreaView testID="drawer-panel" className="w-72 bg-background-0">
-        <View className="flex-1 px-6 py-8">
+    <Drawer isOpen={isOpen} onClose={onClose} anchor="left" size="lg">
+      <DrawerBackdrop testID="drawer-backdrop" onPress={onClose} />
+      <DrawerContent testID="drawer-panel" className="py-8">
+        <DrawerBody>
           <View className="mb-10 mt-4">
             <Text className="text-3xl font-bold tracking-wider text-primary">
               KINETIC
@@ -63,13 +63,13 @@ export function SideDrawer({ isOpen, onClose, onNavigate }: SideDrawerProps) {
               </Pressable>
             ))}
           </View>
-        </View>
-        <View className="px-6 pb-8">
+        </DrawerBody>
+        <DrawerFooter className="justify-start">
           <Text className="text-xs tracking-widest text-primary opacity-40">
             V 2.0.4 KINETIC
           </Text>
-        </View>
-      </SafeAreaView>
-    </View>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }
