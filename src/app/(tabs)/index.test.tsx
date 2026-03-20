@@ -69,18 +69,24 @@ describe('HomeScreen', () => {
 
     it('shows no workouts message', () => {
       renderHome();
-      expect(screen.getByText('No workouts yet')).toBeTruthy();
+      expect(screen.getByText('START YOUR JOURNEY')).toBeTruthy();
     });
 
-    it('shows Add Workout CTA button', () => {
+    it('shows Create Your First Workout CTA button', () => {
       renderHome();
-      expect(screen.getByText('Add Workout')).toBeTruthy();
+      expect(screen.getByTestId('create-first-workout-button')).toBeTruthy();
     });
 
     it('navigates to workouts tab when CTA is pressed', () => {
       renderHome();
-      fireEvent.press(screen.getByText('Add Workout'));
+      fireEvent.press(screen.getByTestId('create-first-workout-button'));
       expect(mockNavigate).toHaveBeenCalledWith('/(tabs)/workouts');
+    });
+
+    it('opens drawer when hamburger button is pressed', () => {
+      renderHome();
+      fireEvent.press(screen.getByTestId('hamburger-button'));
+      expect(screen.getByTestId('drawer-panel')).toBeTruthy();
     });
   });
 
@@ -104,9 +110,9 @@ describe('HomeScreen', () => {
       expect(screen.getByText('Push Day')).toBeTruthy();
     });
 
-    it('does not show Add Workout CTA text', () => {
+    it('does not show Create Your First Workout CTA', () => {
       renderHome();
-      expect(screen.queryByText('Add Workout')).toBeNull();
+      expect(screen.queryByTestId('create-first-workout-button')).toBeNull();
     });
 
     it('navigates to workouts tab when header add button is pressed', () => {

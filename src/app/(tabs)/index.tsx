@@ -1,7 +1,7 @@
+import { EmptyWorkout } from '@/components/EmptyWorkout';
 import { SideDrawer } from '@/components/SideDrawer';
 import { ThemedView } from '@/components/ThemedView';
 import { WorkoutProgressCard } from '@/components/WorkoutProgressCard';
-import Dumbbell from '@/components/icons/Dumbbell';
 import Menu from '@/components/icons/Menu';
 import Plus from '@/components/icons/Plus';
 import RotateCcw from '@/components/icons/RotateCcw';
@@ -71,7 +71,7 @@ function HomeView({
     <SafeAreaView className="flex-1 bg-background-0">
       <ThemedView className="flex-1 px-4">
         {/* Header */}
-        <View className="mb-8 flex-row items-center py-4">
+        <View className="mb-4 flex-row items-center py-4">
           <Pressable
             testID="hamburger-button"
             onPress={onOpenDrawer}
@@ -79,7 +79,12 @@ function HomeView({
           >
             <Menu size={24} className="text-primary" />
           </Pressable>
-          <Text className="absolute left-0 right-0 text-center text-xl font-bold tracking-widest">KINETIC</Text>
+          <Text
+            className="absolute left-0 right-0 text-center text-xl font-bold tracking-widest"
+            pointerEvents="none"
+          >
+            KINETIC
+          </Text>
           {hasWorkouts && (
             <Pressable
               testID="header-add-button"
@@ -93,24 +98,7 @@ function HomeView({
         </View>
 
         {!hasWorkouts ? (
-          <View className="flex-1 items-center justify-center gap-3">
-            <Dumbbell size={72} className="text-primary" />
-            <Heading size="lg" className="mt-2">
-              No workouts yet
-            </Heading>
-            <Text className="text-center text-sm opacity-50">
-              Create your first workout to get started
-            </Text>
-            <Pressable
-              className="mt-2 flex-row items-center gap-2 rounded-xl bg-primary px-6 py-3.5"
-              onPress={onAddWorkout}
-            >
-              <Plus size={20} className="text-secondary-0" />
-              <Text className="font-semibold text-secondary-0">
-                Add Workout
-              </Text>
-            </Pressable>
-          </View>
+          <EmptyWorkout onCreateWorkout={onAddWorkout} />
         ) : (
           <>
             <View className="mb-4">
