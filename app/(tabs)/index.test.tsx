@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react-native';
+import { fireEvent, render, screen } from '@testing-library/react-native';
 import React from 'react';
 import { Alert } from 'react-native';
 
@@ -12,7 +12,12 @@ jest.mock('expo-router', () => ({
   useRouter: () => ({ navigate: mockNavigate, push: mockPush }),
 }));
 
-const mockWorkouts: { id: string; name: string; exercises: never[]; createdAt: Date }[] = [];
+const mockWorkouts: {
+  id: string;
+  name: string;
+  exercises: never[];
+  createdAt: Date;
+}[] = [];
 const mockWorkoutLogs: Record<string, unknown> = {};
 const mockToggleWorkoutComplete = jest.fn();
 const mockRestartRoutine = jest.fn();
@@ -28,10 +33,14 @@ jest.mock('@/hooks/useWorkoutLogs', () => ({
   }),
 }));
 jest.mock('@/providers/WorkoutProvider', () => ({
-  WorkoutProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  WorkoutProvider: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
 }));
 jest.mock('@/providers/WorkoutLogProvider', () => ({
-  WorkoutLogProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  WorkoutLogProvider: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
 }));
 
 // Import after mocks
@@ -77,17 +86,17 @@ describe('HomeScreen', () => {
 
   describe('with workouts', () => {
     beforeEach(() => {
-      mockWorkouts.push({ id: '1', name: 'Push Day', exercises: [], createdAt: new Date() });
+      mockWorkouts.push({
+        id: '1',
+        name: 'Push Day',
+        exercises: [],
+        createdAt: new Date(),
+      });
     });
 
     it('shows My Workouts heading', () => {
       renderHome();
       expect(screen.getByText('My Workouts')).toBeTruthy();
-    });
-
-    it("shows TODAY'S PLAN label", () => {
-      renderHome();
-      expect(screen.getByText("TODAY'S PLAN")).toBeTruthy();
     });
 
     it('shows the workout in the list', () => {

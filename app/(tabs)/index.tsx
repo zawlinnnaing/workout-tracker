@@ -1,15 +1,15 @@
 import { SideDrawer } from '@/components/SideDrawer';
 import { ThemedView } from '@/components/ThemedView';
 import { WorkoutProgressCard } from '@/components/WorkoutProgressCard';
+import Dumbbell from '@/components/icons/Dumbbell';
+import Menu from '@/components/icons/Menu';
+import Plus from '@/components/icons/Plus';
+import RotateCcw from '@/components/icons/RotateCcw';
 import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
 import { useWorkoutLogs } from '@/hooks/useWorkoutLogs';
 import { useWorkouts } from '@/hooks/useWorkouts';
 import { Workout, WorkoutLog } from '@/types/workout';
-import Dumbbell from '@/components/icons/Dumbbell';
-import Menu from '@/components/icons/Menu';
-import Plus from '@/components/icons/Plus';
-import RotateCcw from '@/components/icons/RotateCcw';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, FlatList, Pressable, View } from 'react-native';
@@ -71,12 +71,20 @@ function HomeView({
     <SafeAreaView className="flex-1 bg-background-0">
       <ThemedView className="flex-1 px-4">
         {/* Header */}
-        <View className="flex-row items-center justify-between py-4">
-          <Pressable testID="hamburger-button" onPress={onOpenDrawer} hitSlop={8}>
+        <View className="mb-8 flex-row items-center justify-between py-4">
+          <Pressable
+            testID="hamburger-button"
+            onPress={onOpenDrawer}
+            hitSlop={8}
+          >
             <Menu size={24} className="text-primary" />
           </Pressable>
           <Text className="text-xl font-bold tracking-widest">KINETIC</Text>
-          <Pressable testID="header-add-button" onPress={onAddWorkout} hitSlop={8}>
+          <Pressable
+            testID="header-add-button"
+            onPress={onAddWorkout}
+            hitSlop={8}
+          >
             <Plus size={24} className="text-primary" />
           </Pressable>
         </View>
@@ -95,15 +103,14 @@ function HomeView({
               onPress={onAddWorkout}
             >
               <Plus size={20} className="text-secondary-0" />
-              <Text className="font-semibold text-secondary-0">Add Workout</Text>
+              <Text className="font-semibold text-secondary-0">
+                Add Workout
+              </Text>
             </Pressable>
           </View>
         ) : (
           <>
             <View className="mb-4">
-              <Text className="text-xs font-bold tracking-widest opacity-50 mb-1">
-                {"TODAY'S PLAN"}
-              </Text>
               <View className="flex-row items-center justify-between">
                 <Heading size="2xl">My Workouts</Heading>
                 {hasAnyProgress && (
@@ -144,7 +151,8 @@ function HomeView({
 function withHome(Component: typeof HomeView) {
   return function HomeContainer() {
     const { workouts } = useWorkouts();
-    const { workoutLogs, toggleWorkoutComplete, restartRoutine } = useWorkoutLogs();
+    const { workoutLogs, toggleWorkoutComplete, restartRoutine } =
+      useWorkoutLogs();
     const router = useRouter();
     const [drawerOpen, setDrawerOpen] = useState(false);
 

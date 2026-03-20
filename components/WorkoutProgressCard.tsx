@@ -1,9 +1,9 @@
-import CheckSquare from '@/components/icons/CheckSquare';
-import Square from '@/components/icons/Square';
 import { Card } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
 import { Workout, WorkoutLog } from '@/types/workout';
+import { cn } from '@/utils/styles';
+import { CheckIcon } from 'lucide-react-native';
 import React from 'react';
 import { Pressable, View } from 'react-native';
 
@@ -33,23 +33,28 @@ export function WorkoutProgressCard({
       style={({ pressed }) => ({ opacity: pressed ? 0.8 : 1 })}
       onPress={onPress}
     >
-      <Card className="rounded-2xl p-4 gap-3">
+      <Card className="gap-3 rounded-2xl p-4">
         <View className="flex-row items-center gap-3">
           <Pressable
             testID={`workout-checkbox-${workout.id}`}
             onPress={onCheck}
             hitSlop={8}
+            className={cn(
+              'h-7 w-7 items-center justify-center rounded-md',
+              isCompleted ? 'bg-primary' : 'border-2 border-primary',
+            )}
           >
             {isCompleted ? (
-              <CheckSquare size={26} className="text-primary" />
-            ) : (
-              <Square size={26} className="text-primary" />
-            )}
+              <CheckIcon size={16} className="text-secondary" />
+            ) : null}
           </Pressable>
           <View className="flex-1">
             <Heading size="lg">{workout.name}</Heading>
             {workout.description ? (
-              <Text testID="workout-description" className="text-sm opacity-60 mt-0.5">
+              <Text
+                testID="workout-description"
+                className="mt-0.5 text-sm opacity-60"
+              >
                 {workout.description}
               </Text>
             ) : null}
@@ -58,14 +63,12 @@ export function WorkoutProgressCard({
 
         <View className="gap-1.5">
           <View className="flex-row items-center justify-between">
-            <Text className="text-xs font-bold tracking-widest opacity-50">
-              PROGRESS
-            </Text>
-            <Text className="text-xs opacity-60">
+            <Text className="text-xs font-bold tracking-widest">PROGRESS</Text>
+            <Text className="text-xs">
               {completedExercises} of {totalExercises} exercises completed
             </Text>
           </View>
-          <View className="h-1 rounded-full bg-background-100 overflow-hidden">
+          <View className="h-1 overflow-hidden rounded-full bg-background-100">
             <View
               className="h-full rounded-full bg-primary"
               style={{ width: `${progress * 100}%` }}
