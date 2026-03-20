@@ -29,6 +29,7 @@ export default function WorkoutDetailScreen() {
     null,
   );
   const [editingExerciseName, setEditingExerciseName] = useState('');
+  const [weightInputs, setWeightInputs] = useState<Record<string, string>>({});
 
   const colorScheme = useColorScheme() ?? 'light';
   const textColor = colorScheme === 'dark' ? '#ECEDEE' : '#11181C';
@@ -69,7 +70,12 @@ export default function WorkoutDetailScreen() {
     field: 'reps' | 'weight' | 'numberOfSets',
     value: string,
   ) => {
-    const numValue = value === '' ? undefined : parseInt(value, 10);
+    const numValue =
+      value === ''
+        ? undefined
+        : field === 'weight'
+          ? parseFloat(value)
+          : parseInt(value, 10);
     if (value !== '' && (isNaN(numValue!) || numValue! < 0)) {
       return;
     }
@@ -161,11 +167,13 @@ export default function WorkoutDetailScreen() {
           </Text>
           <Input className="flex-1">
             <InputField
-              value={exercise.weight?.toString() ?? ''}
-              onChangeText={(value: string) =>
-                handleUpdateExerciseField(exercise.id, 'weight', value)
-              }
-              keyboardType="numeric"
+              value={weightInputs[exercise.id] ?? exercise.weight?.toString() ?? ''}
+              onChangeText={(value: string) => {
+                if (value !== '' && !/^\d*\.?\d*$/.test(value)) return;
+                setWeightInputs((prev) => ({ ...prev, [exercise.id]: value }));
+                handleUpdateExerciseField(exercise.id, 'weight', value);
+              }}
+              keyboardType="decimal-pad"
               placeholder="Optional"
             />
           </Input>
