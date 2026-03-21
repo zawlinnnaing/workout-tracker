@@ -209,7 +209,7 @@ function WorkoutLogView({
           )}
 
           {workout.exercises.length === 0 ? (
-            <View className="mt-10 items-center gap-6">
+            <View className="mt-28 items-center gap-6">
               <View
                 className={`items-center justify-center rounded-full bg-background-100 p-6`}
               >
