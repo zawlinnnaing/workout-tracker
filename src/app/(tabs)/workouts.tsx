@@ -1,12 +1,12 @@
+import { CreateWorkoutForm } from '@/components/CreateWorkoutForm';
 import { ThemedView } from '@/components/ThemedView';
 import { WorkoutCard } from '@/components/WorkoutCard';
 import { WorkoutQuote } from '@/components/WorkoutQuote';
 import Menu from '@/components/icons/Menu';
 import Plus from '@/components/icons/Plus';
-import { Button, ButtonText } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
-import { Input, InputField } from '@/components/ui/input';
 import { Text } from '@/components/ui/text';
 import { useWorkouts } from '@/hooks/useWorkouts';
 import { Workout } from '@/types/workout';
@@ -28,6 +28,11 @@ export default function WorkoutsScreen() {
       setShowNewWorkoutInput(false);
       router.push(`/workout/${workout.id}`);
     }
+  };
+
+  const handleCancelCreate = () => {
+    setShowNewWorkoutInput(false);
+    setNewWorkoutName('');
   };
 
   const renderWorkoutItem = ({ item }: { item: Workout }) => (
@@ -84,32 +89,12 @@ export default function WorkoutsScreen() {
 
         {/* Inline create form */}
         {showNewWorkoutInput && (
-          <Card className="mb-5 p-4">
-            <Input className="mb-3">
-              <InputField
-                placeholder="Workout name"
-                value={newWorkoutName}
-                onChangeText={setNewWorkoutName}
-                autoFocus
-                onSubmitEditing={handleCreateWorkout}
-              />
-            </Input>
-            <View className="flex-row gap-3">
-              <Button
-                className="flex-1"
-                variant="outline"
-                onPress={() => {
-                  setShowNewWorkoutInput(false);
-                  setNewWorkoutName('');
-                }}
-              >
-                <ButtonText>Cancel</ButtonText>
-              </Button>
-              <Button className="flex-1" onPress={handleCreateWorkout}>
-                <ButtonText>Create</ButtonText>
-              </Button>
-            </View>
-          </Card>
+          <CreateWorkoutForm
+            value={newWorkoutName}
+            onChangeText={setNewWorkoutName}
+            onSubmit={handleCreateWorkout}
+            onCancel={handleCancelCreate}
+          />
         )}
 
         <FlatList
