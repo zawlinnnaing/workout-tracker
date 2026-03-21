@@ -3,6 +3,7 @@ import History from '@/components/icons/History';
 import ListChecks from '@/components/icons/ListChecks';
 import Settings from '@/components/icons/Settings';
 import User from '@/components/icons/User';
+import { WrappedIcon } from '@/components/icons/utils';
 import {
   Drawer,
   DrawerBackdrop,
@@ -17,7 +18,7 @@ type NavRoute = '/(tabs)/index' | '/(tabs)/workouts';
 
 interface NavItem {
   label: string;
-  icon: React.ComponentType<{ size: number; className?: string }>;
+  icon: WrappedIcon;
   route: NavRoute | null;
 }
 

@@ -1,6 +1,10 @@
+import { LucideIcon, LucideProps } from 'lucide-react-native';
 import { cssInterop } from 'nativewind';
+import { ComponentType } from 'react';
 
-export function wrapIcon(icon: React.ComponentType<any>) {
+export type WrappedIcon = ComponentType<LucideProps & { className?: string }>;
+
+export function wrapIcon(icon: LucideIcon): WrappedIcon {
   return cssInterop(icon, {
     className: {
       target: 'style',
@@ -10,5 +14,5 @@ export function wrapIcon(icon: React.ComponentType<any>) {
         height: 'size',
       },
     },
-  });
+  }) as WrappedIcon;
 }
