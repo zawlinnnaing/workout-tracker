@@ -1,14 +1,8 @@
+import { Circle, CircleCheck, Dumbbell } from '@/components/icons';
 import { ThemedView } from '@/components/ThemedView';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionHeader,
-  AccordionIcon,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
 import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
+import { useColorScheme } from '@/hooks/useColorScheme';
 import { useWorkoutLogs } from '@/hooks/useWorkoutLogs';
 import { useWorkouts } from '@/hooks/useWorkouts';
 import {
@@ -19,12 +13,6 @@ import {
   WorkoutLog,
 } from '@/types/workout';
 import { Stack, useLocalSearchParams } from 'expo-router';
-import {
-  ChevronDown,
-  Dumbbell,
-  Square,
-  SquareCheck,
-} from 'lucide-react-native';
 import { Pressable, ScrollView, View } from 'react-native';
 
 interface WorkoutLogViewProps {
@@ -41,25 +29,54 @@ interface WorkoutLogViewProps {
 function SetRow({
   setLog,
   setNumber,
+  exercise,
   onComplete,
 }: {
   setLog: SetLog | undefined;
   setNumber: number;
+  exercise: Exercise;
   onComplete: () => void;
 }) {
   const isDone = !!setLog?.completedAt;
+  const colorScheme = useColorScheme() ?? 'light';
+  const isDark = colorScheme === 'dark';
+
+  const label = [
+    exercise.reps > 0 ? `${exercise.reps} reps` : null,
+    exercise.weight ? `${exercise.weight} kg` : null,
+  ]
+    .filter(Boolean)
+    .join(' · ');
+
   return (
     <Pressable
-      className="flex-row items-center gap-3 px-4 py-2 text-primary"
-      style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
       onPress={onComplete}
+      style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
+      className={`flex-row items-center gap-3 px-4 py-3 ${isDone ? (isDark ? 'bg-white/10' : 'bg-black/10') : ''}`}
     >
-      {isDone ? <SquareCheck size={20} /> : <Square size={20} />}
-      <Text
-        className={`text-sm ${isDone ? 'line-through opacity-50' : 'opacity-80'}`}
+      <View
+        className={`h-7 w-7 items-center justify-center rounded-full ${isDone ? 'bg-white' : (isDark ? 'bg-white/20' : 'bg-black/20')}`}
       >
-        Set {setNumber}
+        <Text
+          className={`text-xs font-bold ${isDone ? 'text-black' : (isDark ? 'text-white' : 'text-black')}`}
+        >
+          {setNumber}
+        </Text>
+      </View>
+      <Text
+        className={`flex-1 text-sm ${isDone ? 'line-through opacity-50' : 'opacity-80'}`}
+      >
+        {label || `Set ${setNumber}`}
       </Text>
+      {isDone ? (
+        <CircleCheck
+          className={isDark ? 'text-black' : 'text-white'}
+          fill={isDark ? '#ffffff' : '#000000'}
+          size={22}
+        />
+      ) : (
+        <Circle className={isDark ? 'text-white/40' : 'text-black/30'} size={22} />
+      )}
     </Pressable>
   );
 }
@@ -76,63 +93,61 @@ function ExerciseRow({
   onCompleteSet: (setIndex: number) => void;
 }) {
   const isCompleted = !!exerciseLog?.completedAt;
-
-  const setsLabel = [
-    exercise.numberOfSets > 0 ? `${exercise.numberOfSets} sets` : null,
-    exercise.reps > 0 ? `${exercise.reps} reps` : null,
-    exercise.weight ? `${exercise.weight} kg` : null,
-  ]
-    .filter(Boolean)
-    .join(' · ');
+  const colorScheme = useColorScheme() ?? 'light';
+  const isDark = colorScheme === 'dark';
 
   return (
-    <Accordion
-      type="multiple"
-      variant="unfilled"
-      className="overflow-hidden rounded-lg border border-outline-100"
-    >
-      <AccordionItem value={exercise.id}>
-        <AccordionHeader>
-          <AccordionTrigger className="px-4 py-3 text-primary">
-            <Pressable
-              onPress={(e) => {
-                e.stopPropagation();
-                onCompleteExercise();
-              }}
-              hitSlop={8}
-            >
-              {isCompleted ? (
-                <SquareCheck size={26} style={{ marginRight: 12 }} />
-              ) : (
-                <Square size={26} style={{ marginRight: 12 }} />
-              )}
-            </Pressable>
-            <View className="flex-1 gap-1">
-              <Heading
-                size="md"
-                className={isCompleted ? 'line-through opacity-50' : ''}
-              >
-                {exercise.name}
-              </Heading>
-              {setsLabel ? (
-                <Text className="text-[13px] opacity-60">{setsLabel}</Text>
-              ) : null}
-            </View>
-            <AccordionIcon as={ChevronDown} size="xl" className="ml-2" />
-          </AccordionTrigger>
-        </AccordionHeader>
-        <AccordionContent className="px-0 pb-2 pt-0">
-          {Array.from({ length: exercise.numberOfSets }, (_, i) => (
+    <View>
+      <View className="mb-2 flex-row items-center gap-2">
+        <Heading
+          size="lg"
+          className={`${isCompleted ? 'line-through opacity-50' : ''}`}
+        >
+          {exercise.name}
+        </Heading>
+        <Pressable
+          onPress={onCompleteExercise}
+          hitSlop={8}
+          style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
+        >
+          {isCompleted ? (
+            <CircleCheck
+              className={isDark ? 'text-black' : 'text-white'}
+              fill={isDark ? '#ffffff' : '#000000'}
+              size={24}
+            />
+          ) : (
+            <Circle className={isDark ? 'text-white/40' : 'text-black/40'} size={24} />
+          )}
+        </Pressable>
+        <View className="flex-1" />
+        {exercise.numberOfSets > 0 && (
+          <Text className="text-xs font-bold uppercase opacity-50" testID={`sets-label-${exercise.id}`}>
+            {exercise.numberOfSets} Sets
+          </Text>
+        )}
+      </View>
+
+      <View
+        className={`overflow-hidden rounded-xl ${isDark ? 'bg-white/8' : 'bg-black/5'}`}
+      >
+        {Array.from({ length: exercise.numberOfSets }, (_, i) => (
+          <View key={i}>
+            {i > 0 && (
+              <View
+                className={`mx-4 h-px ${isDark ? 'bg-white/10' : 'bg-black/10'}`}
+              />
+            )}
             <SetRow
-              key={i}
               setLog={exerciseLog?.sets?.find((s) => s.setIndex === i)}
               setNumber={i + 1}
+              exercise={exercise}
               onComplete={() => onCompleteSet(i)}
             />
-          ))}
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
+          </View>
+        ))}
+      </View>
+    </View>
   );
 }
 
@@ -146,6 +161,8 @@ function WorkoutLogView({
     ? log.exercises.filter((e) => !!e.completedAt).length
     : 0;
   const totalCount = workout.exercises.length;
+  const colorScheme = useColorScheme() ?? 'light';
+  const isDark = colorScheme === 'dark';
 
   const getExerciseLog = (exerciseId: string): ExerciseLog | undefined =>
     log?.exercises.find((e) => e.exercise.id === exerciseId);
@@ -154,7 +171,7 @@ function WorkoutLogView({
     <>
       <Stack.Screen
         options={{
-          title: workout.name,
+          title: 'Workout Detail',
           headerBackTitle: 'Back',
         }}
       />
@@ -163,7 +180,16 @@ function WorkoutLogView({
           contentContainerStyle={{ padding: 16 }}
           showsVerticalScrollIndicator={false}
         >
-          <View className="mb-5 flex-row items-center justify-between">
+          <View className="mb-6">
+            <Text className="mb-1 text-xs font-bold uppercase opacity-50">
+              Primary Focus
+            </Text>
+            <Heading size="3xl" className="font-black leading-tight">
+              {workout.name}
+            </Heading>
+          </View>
+
+          <View className="mb-5">
             <Text className="text-sm font-semibold opacity-60">
               {completedCount} / {totalCount} exercises completed
             </Text>
@@ -171,14 +197,14 @@ function WorkoutLogView({
 
           {workout.exercises.length === 0 ? (
             <View className="mt-10 items-center gap-3">
-              <Dumbbell size={64} color="#9BA1A6" />
+              <Dumbbell size={64} color={isDark ? '#9BA1A6' : '#9BA1A6'} />
               <Heading size="md">No exercises yet</Heading>
               <Text className="text-center text-sm opacity-70">
                 Add exercises in the Workouts tab
               </Text>
             </View>
           ) : (
-            <View className="gap-3">
+            <View className="gap-6">
               {workout.exercises.map((exercise) => (
                 <ExerciseRow
                   key={exercise.id}

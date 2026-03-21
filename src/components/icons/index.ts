@@ -1,4 +1,6 @@
 export { default as ChevronRight } from './ChevronRight';
+export { default as Circle } from './Circle';
+export { default as CircleCheck } from './CircleCheck';
 export { default as Code } from './Code';
 export { default as Dumbbell } from './Dumbbell';
 export { default as Home } from './Home';

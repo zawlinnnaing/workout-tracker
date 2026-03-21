@@ -69,36 +69,31 @@ describe('WorkoutLogScreen', () => {
     expect(screen.getByText('0 / 2 exercises completed')).toBeTruthy();
   });
 
-  it('shows sets info for exercises', () => {
+  it('shows workout name in header', () => {
     renderScreen();
-    expect(screen.getByText('3 sets · 10 reps · 60 kg')).toBeTruthy();
-    expect(screen.getByText('4 sets · 8 reps')).toBeTruthy();
+    expect(screen.getByText('Push Day')).toBeTruthy();
   });
 
-  it('calls completeExercise when exercise checkbox is pressed', () => {
+  it('shows sets count labels for exercises', () => {
     renderScreen();
-    // getAllByText returns the Heading text; pressing it fires onPress on the AccordionTrigger
-    // but the checkbox is a nested Pressable — fire press on the exercise name area
-    fireEvent.press(screen.getByText('Bench Press'));
-    // The accordion trigger expands; the checkbox is a child Pressable with stopPropagation
-    // Test via direct label: find all 'Bench Press' pressables
-    expect(mockCompleteExercise).not.toHaveBeenCalled(); // trigger just expands
+    expect(screen.getByTestId('sets-label-e1')).toBeTruthy();
+    expect(screen.getByTestId('sets-label-e2')).toBeTruthy();
   });
 
-  it('shows set rows in accordion content', () => {
+  it('shows set rows with reps and weight', () => {
     renderScreen();
-    // Accordion renders content in DOM — set rows are always present
-    const set1Rows = screen.getAllByText('Set 1');
-    // Bench Press has 3 sets, Squat has 4 sets — total 2 "Set 1" rows (one per exercise)
-    expect(set1Rows.length).toBe(2);
-    expect(screen.getAllByText('Set 3').length).toBe(2); // both exercises have >= 3 sets
-    expect(screen.getAllByText('Set 4').length).toBe(1); // only Squat has 4 sets
+    // Bench Press has 3 sets, each showing "10 reps · 60 kg"
+    const benchSetRows = screen.getAllByText('10 reps · 60 kg');
+    expect(benchSetRows.length).toBe(3);
+    // Squat has 4 sets, each showing "8 reps" (no weight)
+    const squatSetRows = screen.getAllByText('8 reps');
+    expect(squatSetRows.length).toBe(4);
   });
 
   it('calls completeSet when a set row is pressed', () => {
     renderScreen();
-    // Press the first "Set 1" (belongs to Bench Press / e1)
-    fireEvent.press(screen.getAllByText('Set 1')[0]);
+    // Press first set row of Bench Press (first "10 reps · 60 kg")
+    fireEvent.press(screen.getAllByText('10 reps · 60 kg')[0]);
     expect(mockCompleteSet).toHaveBeenCalledWith(
       expect.objectContaining({ id: 'w1' }),
       'e1',
