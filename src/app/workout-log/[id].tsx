@@ -200,7 +200,7 @@ function WorkoutLogView({
             </Heading>
           </View>
 
-          {workout.exercises.length && (
+          {workout.exercises.length > 0 && (
             <View className="mb-5">
               <Text className="text-sm font-semibold opacity-60">
                 {completedCount} / {totalCount} exercises completed
