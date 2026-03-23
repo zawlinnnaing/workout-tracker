@@ -1,11 +1,9 @@
 import { CreateWorkoutForm } from '@/components/CreateWorkoutForm';
 import { ThemedView } from '@/components/ThemedView';
 import { WorkoutCard } from '@/components/WorkoutCard';
-import { WorkoutQuote } from '@/components/WorkoutQuote';
 import Menu from '@/components/icons/Menu';
 import Plus from '@/components/icons/Plus';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
 import { useWorkouts } from '@/hooks/useWorkouts';
@@ -121,16 +119,6 @@ export default function WorkoutsScreen() {
                 No routines yet. Add your first workout above.
               </Text>
             </View>
-          }
-          ListFooterComponent={
-            workouts.length > 0 ? (
-              <Card
-                className="mt-6 items-center rounded-2xl p-6"
-                variant="filled"
-              >
-                <WorkoutQuote />
-              </Card>
-            ) : null
           }
         />
       </ThemedView>

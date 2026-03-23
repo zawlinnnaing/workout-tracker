@@ -2,9 +2,11 @@ import { EmptyWorkout } from '@/components/EmptyWorkout';
 import { SideDrawer } from '@/components/SideDrawer';
 import { ThemedView } from '@/components/ThemedView';
 import { WorkoutProgressCard } from '@/components/WorkoutProgressCard';
+import { WorkoutQuote } from '@/components/WorkoutQuote';
 import Menu from '@/components/icons/Menu';
 import Plus from '@/components/icons/Plus';
 import RotateCcw from '@/components/icons/RotateCcw';
+import { Card } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
 import { useWorkoutLogs } from '@/hooks/useWorkoutLogs';
@@ -125,6 +127,11 @@ function HomeView({
               keyExtractor={(item) => item.id}
               contentContainerStyle={{ gap: 12 }}
               showsVerticalScrollIndicator={false}
+              ListFooterComponent={
+                <Card className="mt-6 items-center rounded-2xl p-6" variant="filled">
+                  <WorkoutQuote />
+                </Card>
+              }
             />
           </>
         )}
