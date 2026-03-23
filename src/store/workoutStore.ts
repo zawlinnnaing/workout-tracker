@@ -66,7 +66,7 @@ export const useWorkoutStore = create<WorkoutState>((set, get) => ({
     set((state) => ({
       workouts: state.workouts.map((w) =>
         w.id === workoutId
-          ? { ...w, exercises: [...w.exercises, newExercise] }
+          ? { ...w, exercises: [newExercise, ...w.exercises] }
           : w,
       ),
     }));

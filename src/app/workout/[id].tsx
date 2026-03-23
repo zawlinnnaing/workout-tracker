@@ -1,5 +1,6 @@
 import { Dumbbell, Plus, Trash2 } from '@/components/icons';
 import { ThemedView } from '@/components/ThemedView';
+import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
 import { Input, InputField } from '@/components/ui/input';
@@ -87,17 +88,16 @@ export default function WorkoutDetailScreen() {
   };
 
   const renderExercise = (exercise: Exercise) => (
-    <Card
-      key={exercise.id}
-      className="rounded-xl bg-[#fff] p-4 dark:bg-[#151718]"
-    >
-      <View className="mb-3 flex-row items-center justify-between">
+    <Card key={exercise.id} variant="filled" className="rounded-2xl p-5">
+      {/* Exercise name row */}
+      <View className="mb-5 flex-row items-start justify-between">
         {editingExerciseId === exercise.id ? (
           <Input className="mr-3 flex-1" variant="underlined">
             <InputField
               value={editingExerciseName}
               onChangeText={setEditingExerciseName}
               autoFocus
+              style={{ fontSize: 18, fontWeight: '600' }}
               onBlur={() => {
                 if (editingExerciseName.trim()) {
                   updateExercise(workout.id, exercise.id, {
@@ -129,28 +129,39 @@ export default function WorkoutDetailScreen() {
         )}
         <Pressable
           onPress={() => handleDeleteExercise(exercise.id, exercise.name)}
+          hitSlop={8}
+          className="mt-0.5"
         >
-          <Trash2 size={20} color="red" />
+          <Trash2 size={20} className="text-error-600" />
         </Pressable>
       </View>
 
-      <View className="mb-3 gap-3">
-        <View className="flex-row items-center gap-3">
-          <Text className="w-24 text-sm font-semibold opacity-70">Sets</Text>
-          <Input className="flex-1">
+      {/* Metrics — 3 columns: Sets | Reps | Weight(KG) */}
+      <View className="flex-row">
+        {/* Sets */}
+        <View className="flex-1 items-center">
+          <Text className="mb-2 text-xs font-bold uppercase tracking-widest opacity-50">
+            Sets
+          </Text>
+          <Input variant="underlined" className="w-full">
             <InputField
               value={exercise.numberOfSets?.toString()}
               onChangeText={(value: string) =>
                 handleUpdateExerciseField(exercise.id, 'numberOfSets', value)
               }
               keyboardType="numeric"
-              placeholder="1"
+              placeholder="0"
+              style={{ fontSize: 36, fontWeight: '800', textAlign: 'center' }}
             />
           </Input>
         </View>
-        <View className="flex-row items-center gap-3">
-          <Text className="w-24 text-sm font-semibold opacity-70">Reps</Text>
-          <Input className="flex-1">
+
+        {/* Reps */}
+        <View className="flex-1 items-center">
+          <Text className="mb-2 text-xs font-bold uppercase tracking-widest opacity-50">
+            Reps
+          </Text>
+          <Input variant="underlined" className="w-full">
             <InputField
               value={exercise.reps.toString()}
               onChangeText={(value: string) =>
@@ -158,23 +169,32 @@ export default function WorkoutDetailScreen() {
               }
               keyboardType="numeric"
               placeholder="0"
+              style={{ fontSize: 36, fontWeight: '800', textAlign: 'center' }}
             />
           </Input>
         </View>
-        <View className="flex-row items-center gap-3">
-          <Text className="w-24 text-sm font-semibold opacity-70">
-            Weight (kg)
+
+        {/* Weight (KG) */}
+        <View className="flex-1 items-center">
+          <Text className="mb-2 text-xs font-bold uppercase tracking-widest opacity-50">
+            KG
           </Text>
-          <Input className="flex-1">
+          <Input variant="underlined" className="w-full">
             <InputField
-              value={weightInputs[exercise.id] ?? exercise.weight?.toString() ?? ''}
+              value={
+                weightInputs[exercise.id] ?? exercise.weight?.toString() ?? ''
+              }
               onChangeText={(value: string) => {
                 if (value !== '' && !/^\d*\.?\d*$/.test(value)) return;
-                setWeightInputs((prev) => ({ ...prev, [exercise.id]: value }));
+                setWeightInputs((prev) => ({
+                  ...prev,
+                  [exercise.id]: value,
+                }));
                 handleUpdateExerciseField(exercise.id, 'weight', value);
               }}
               keyboardType="decimal-pad"
-              placeholder="Optional"
+              placeholder="—"
+              style={{ fontSize: 36, fontWeight: '800', textAlign: 'center' }}
             />
           </Input>
         </View>
@@ -186,23 +206,24 @@ export default function WorkoutDetailScreen() {
     <>
       <Stack.Screen
         options={{
-          title: workout.name,
+          title: '',
           headerBackTitle: 'Back',
         }}
       />
       <ThemedView className="flex-1">
         <ScrollView
-          contentContainerStyle={{ padding: 16 }}
+          contentContainerStyle={{ padding: 16, paddingBottom: 48 }}
           showsVerticalScrollIndicator={false}
         >
-          <View className="mb-5">
+          {/* Workout name — Headline-LG editorial */}
+          <View className="mb-8">
             {editingWorkoutName ? (
               <Input variant="underlined">
                 <InputField
                   value={workoutNameInput}
                   onChangeText={setWorkoutNameInput}
                   autoFocus
-                  style={{ fontSize: 24, fontWeight: 'bold' }}
+                  style={{ fontSize: 30, fontWeight: '800' }}
                   onBlur={() => {
                     if (workoutNameInput.trim()) {
                       updateWorkout(workout.id, {
@@ -228,59 +249,84 @@ export default function WorkoutDetailScreen() {
                   setEditingWorkoutName(true);
                 }}
               >
-                <Heading size="2xl">{workout.name}</Heading>
+                <Heading size="3xl" className="font-extrabold">
+                  {workout.name}
+                </Heading>
               </Pressable>
             )}
-            <Text className="mt-1 text-xs opacity-60">
-              Created: {new Date(workout.createdAt).toLocaleDateString()}
+            <Text className="mt-2 text-xs font-bold uppercase tracking-widest opacity-40">
+              {new Date(workout.createdAt).toLocaleDateString('en-US', {
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric',
+              })}
             </Text>
           </View>
 
+          {/* Add exercise CTA */}
+          <Button
+            className="mb-8 h-fit flex-row items-center justify-center gap-3 rounded-2xl py-4"
+            onPress={() => setShowAddExercise(true)}
+          >
+            <Plus size={24} className="text-typography-0" />
+            <Text className="text-sm font-bold uppercase tracking-widest text-typography-0">
+              Add Exercise
+            </Text>
+          </Button>
+
+          {/* Inline add exercise form */}
           {showAddExercise && (
-            <Card className="mb-5">
-              <Input className="mb-3">
+            <Card variant="filled" className="mb-8 rounded-2xl p-5">
+              <Text className="mb-2 text-xs font-bold uppercase tracking-widest opacity-50">
+                Exercise Name
+              </Text>
+              <Input variant="underlined" className="mb-6">
                 <InputField
-                  placeholder="Exercise name (e.g., Bench Press)"
+                  placeholder="e.g. Bench Press"
                   value={newExerciseName}
                   onChangeText={setNewExerciseName}
                   autoFocus
+                  style={{ fontSize: 20, fontWeight: '600' }}
                   onSubmitEditing={handleAddExercise}
                 />
               </Input>
               <View className="flex-row gap-3">
                 <Pressable
-                  className="flex-1 items-center rounded-lg border border-primary p-3"
+                  className="flex-1 items-center py-3"
                   onPress={() => {
                     setShowAddExercise(false);
                     setNewExerciseName('');
                   }}
                 >
-                  <Text>Cancel</Text>
+                  <Text className="text-sm font-bold uppercase tracking-widest opacity-50">
+                    Cancel
+                  </Text>
                 </Pressable>
-                <Pressable
-                  className="flex-1 items-center rounded-lg bg-primary p-3"
+                <Button
+                  className="flex-1 rounded-xl"
+                  size="lg"
                   onPress={handleAddExercise}
                 >
-                  <Text onPrimary>Add</Text>
-                </Pressable>
+                  <Text className="text-sm font-bold uppercase tracking-widest text-typography-0">
+                    Add
+                  </Text>
+                </Button>
               </View>
             </Card>
           )}
 
-          <Pressable
-            className="mb-5 flex-row items-center justify-center gap-2 rounded-xl bg-primary p-4"
-            onPress={() => setShowAddExercise(true)}
-          >
-            <Plus size={20} />
-            <Text onPrimary>Add Exercise</Text>
-          </Pressable>
-
+          {/* Exercise list */}
           {workout.exercises.length === 0 ? (
-            <View className="mt-10 items-center gap-3">
-              <Dumbbell size={64} color={textColor + '40'} />
-              <Heading size="md">No exercises yet</Heading>
-              <Text className="text-center text-sm opacity-70">
-                Add your first exercise to get started
+            <View className="mt-12 items-center gap-4">
+              <Dumbbell size={56} color={textColor + '1A'} />
+              <Heading
+                size="md"
+                className="font-bold uppercase tracking-widest"
+              >
+                No exercises yet
+              </Heading>
+              <Text className="text-center text-xs font-semibold uppercase tracking-widest opacity-40">
+                Add your first exercise above
               </Text>
             </View>
           ) : (
