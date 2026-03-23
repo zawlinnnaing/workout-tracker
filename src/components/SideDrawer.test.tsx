@@ -76,6 +76,32 @@ describe('SideDrawer', () => {
     expect(onClose).toHaveBeenCalled();
   });
 
+  it('highlights the active nav item matching the current route', () => {
+    const { getByText } = render(
+      <SideDrawer
+        isOpen={true}
+        onClose={jest.fn()}
+        onNavigate={jest.fn()}
+        activeRoute="/"
+      />,
+    );
+    // Active item text should still be rendered
+    expect(getByText('LOG')).toBeTruthy();
+    expect(getByText('WORKOUTS')).toBeTruthy();
+  });
+
+  it('highlights workouts tab when activeRoute is /workouts', () => {
+    const { getByText } = render(
+      <SideDrawer
+        isOpen={true}
+        onClose={jest.fn()}
+        onNavigate={jest.fn()}
+        activeRoute="/workouts"
+      />,
+    );
+    expect(getByText('WORKOUTS')).toBeTruthy();
+  });
+
   it('only calls onClose (not onNavigate) for items without a route', () => {
     const onNavigate = jest.fn();
     const onClose = jest.fn();

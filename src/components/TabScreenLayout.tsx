@@ -2,7 +2,7 @@ import { SideDrawer } from '@/components/SideDrawer';
 import { ThemedView } from '@/components/ThemedView';
 import Menu from '@/components/icons/Menu';
 import { Text } from '@/components/ui/text';
-import { useRouter } from 'expo-router';
+import { usePathname, useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -17,6 +17,7 @@ export function TabScreenLayout({
   headerRight,
 }: TabScreenLayoutProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
@@ -45,6 +46,7 @@ export function TabScreenLayout({
         isOpen={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         onNavigate={(route) => router.navigate(route as never)}
+        activeRoute={pathname}
       />
     </SafeAreaView>
   );
