@@ -10,11 +10,16 @@ import { useWorkouts } from '@/hooks/useWorkouts';
 import { Workout } from '@/types/workout';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Alert, FlatList, Pressable, View } from 'react-native';
+import { Alert, Pressable, View } from 'react-native';
+import DraggableFlatList, {
+  RenderItemParams,
+  ScaleDecorator,
+} from 'react-native-draggable-flatlist';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function WorkoutsScreen() {
-  const { workouts, addWorkout, deleteWorkout } = useWorkouts();
+  const { workouts, addWorkout, deleteWorkout, reorderWorkouts } =
+    useWorkouts();
   const router = useRouter();
   const [showNewWorkoutInput, setShowNewWorkoutInput] = useState(false);
   const [newWorkoutName, setNewWorkoutName] = useState('');
@@ -39,18 +44,26 @@ export default function WorkoutsScreen() {
       `Are you sure you want to delete "${item.name}"?`,
       [
         { text: 'Cancel', style: 'cancel' },
-        { text: 'Delete', style: 'destructive', onPress: () => deleteWorkout(item.id) },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => deleteWorkout(item.id),
+        },
       ],
     );
   };
 
-  const renderWorkoutItem = ({ item }: { item: Workout }) => (
-    <WorkoutCard
-      workout={item}
-      onPress={() => router.push(`/workout/${item.id}`)}
-      onEdit={() => router.push(`/workout/${item.id}`)}
-      onDelete={() => handleDeleteWorkout(item)}
-    />
+  const renderWorkoutItem = ({ item, drag }: RenderItemParams<Workout>) => (
+    <ScaleDecorator>
+      <WorkoutCard
+        className="mb-4 overflow-hidden rounded-2xl"
+        workout={item}
+        onPress={() => router.push(`/workout/${item.id}`)}
+        onEdit={() => router.push(`/workout/${item.id}`)}
+        onDelete={() => handleDeleteWorkout(item)}
+        drag={drag}
+      />
+    </ScaleDecorator>
   );
 
   return (
@@ -107,11 +120,12 @@ export default function WorkoutsScreen() {
           />
         )}
 
-        <FlatList
+        <DraggableFlatList
           data={workouts}
           renderItem={renderWorkoutItem}
           keyExtractor={(item) => item.id}
-          contentContainerStyle={{ gap: 12 }}
+          onDragEnd={({ data }) => reorderWorkouts(data)}
+          contentContainerStyle={{ paddingBottom: 16 }}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
             <View className="mt-8 items-center">
