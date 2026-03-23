@@ -21,6 +21,7 @@ interface WorkoutCardProps {
   onEdit: () => void;
   onDelete: () => void;
   drag?: () => void;
+  className?: string;
 }
 
 export function WorkoutCard({
@@ -29,6 +30,7 @@ export function WorkoutCard({
   onEdit,
   onDelete,
   drag,
+  className,
 }: WorkoutCardProps) {
   const translateX = useSharedValue(0);
 
@@ -50,7 +52,7 @@ export function WorkoutCard({
   }));
 
   return (
-    <View className="overflow-hidden rounded-2xl">
+    <View className={className}>
       <View
         className="absolute bottom-0 right-0 top-0 flex-row"
         style={{ width: ACTION_WIDTH }}

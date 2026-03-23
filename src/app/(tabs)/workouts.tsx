@@ -56,6 +56,7 @@ export default function WorkoutsScreen() {
   const renderWorkoutItem = ({ item, drag }: RenderItemParams<Workout>) => (
     <ScaleDecorator>
       <WorkoutCard
+        className="mb-4 overflow-hidden rounded-2xl"
         workout={item}
         onPress={() => router.push(`/workout/${item.id}`)}
         onEdit={() => router.push(`/workout/${item.id}`)}
@@ -124,7 +125,7 @@ export default function WorkoutsScreen() {
           renderItem={renderWorkoutItem}
           keyExtractor={(item) => item.id}
           onDragEnd={({ data }) => reorderWorkouts(data)}
-          contentContainerStyle={{ gap: 12 }}
+          contentContainerStyle={{ paddingBottom: 16 }}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
             <View className="mt-8 items-center">
