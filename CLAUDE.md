@@ -75,6 +75,7 @@ Each domain has an interface (`WorkoutStorage`, `WorkoutLogStorage`, `WorkoutHis
 ## Component Rules
 
 - Use `src/components/ui` as founditonal block to build more complex commponents. If you can't find building block, tell me which blocks you need to build.
+- Always have 1 component per file. Except it is HoC. If it is HoC, you can export 2 components. 1 for HoC and another one for pure component.
 
 ### Pure components first
 

@@ -1,5 +1,6 @@
 import { Dumbbell, Plus, Trash2 } from '@/components/icons';
 import { ThemedView } from '@/components/ThemedView';
+import { WorkoutStats } from '@/components/WorkoutStats';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
@@ -258,6 +259,11 @@ export default function WorkoutDetailScreen() {
               {workout.exercises.length}{' '}
               {workout.exercises.length === 1 ? 'Exercise' : 'Exercises'}
             </Text>
+
+            {/* Stats row */}
+            {workout.exercises.length > 0 && (
+              <WorkoutStats exercises={workout.exercises} />
+            )}
           </View>
 
           {/* Add exercise CTA */}
