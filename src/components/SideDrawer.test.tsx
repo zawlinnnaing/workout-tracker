@@ -1,4 +1,4 @@
-import { render, fireEvent } from '@testing-library/react-native';
+import { fireEvent, render } from '@testing-library/react-native';
 import React from 'react';
 import { SideDrawer } from './SideDrawer';
 
@@ -110,12 +110,5 @@ describe('SideDrawer', () => {
     fireEvent.press(getByText('HISTORY'));
     expect(onNavigate).not.toHaveBeenCalled();
     expect(onClose).toHaveBeenCalled();
-  });
-
-  it('shows version number', () => {
-    const { getByText } = render(
-      <SideDrawer isOpen={true} onClose={jest.fn()} onNavigate={jest.fn()} />,
-    );
-    expect(getByText('V 2.0.4 Momentum')).toBeTruthy();
   });
 });

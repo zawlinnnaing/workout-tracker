@@ -12,6 +12,7 @@ import {
   DrawerFooter,
 } from '@/components/ui/drawer';
 import { cn } from '@/utils/styles';
+import Constants from 'expo-constants';
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 
@@ -103,7 +104,7 @@ export function SideDrawer({
         </DrawerBody>
         <DrawerFooter className="justify-start">
           <Text className="text-xs tracking-widest text-primary opacity-40">
-            V 2.0.4 Momentum
+            V {Constants.expoConfig?.version}
           </Text>
         </DrawerFooter>
       </DrawerContent>
