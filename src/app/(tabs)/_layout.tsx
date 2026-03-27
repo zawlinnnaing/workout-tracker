@@ -50,7 +50,7 @@ export default function TabLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ focused }) => (
-            <TabIcon icon={Dumbbell} focused={focused} />
+            <TabIcon icon={ListChecks} focused={focused} />
           ),
           tabBarLabel: ({ focused }) => (
             <TabLabel label="Logs" focused={focused} />
@@ -62,7 +62,7 @@ export default function TabLayout() {
         options={{
           title: 'Workouts',
           tabBarIcon: ({ focused }) => (
-            <TabIcon icon={ListChecks} focused={focused} />
+            <TabIcon icon={Dumbbell} focused={focused} />
           ),
           tabBarLabel: ({ focused }) => (
             <TabLabel label="Workouts" focused={focused} />
