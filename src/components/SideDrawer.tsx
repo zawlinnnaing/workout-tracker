@@ -60,7 +60,7 @@ export function SideDrawer({
         <DrawerBody>
           <View className="mb-10 mt-4">
             <Text className="text-3xl font-bold tracking-wider text-primary">
-              KINETIC
+              Momentum
             </Text>
           </View>
           <View className="gap-2">
@@ -101,7 +101,7 @@ export function SideDrawer({
         </DrawerBody>
         <DrawerFooter className="justify-start">
           <Text className="text-xs tracking-widest text-primary opacity-40">
-            V 2.0.4 KINETIC
+            V 2.0.4 Momentum
           </Text>
         </DrawerFooter>
       </DrawerContent>

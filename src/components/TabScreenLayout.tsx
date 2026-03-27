@@ -35,7 +35,7 @@ export function TabScreenLayout({
             className="absolute left-0 right-0 text-center text-xl font-bold tracking-widest"
             pointerEvents="none"
           >
-            KINETIC
+            Momentum
           </Text>
           {headerRight && <View className="ml-auto">{headerRight}</View>}
         </View>

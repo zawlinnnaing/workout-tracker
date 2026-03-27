@@ -116,6 +116,6 @@ describe('SideDrawer', () => {
     const { getByText } = render(
       <SideDrawer isOpen={true} onClose={jest.fn()} onNavigate={jest.fn()} />,
     );
-    expect(getByText('V 2.0.4 KINETIC')).toBeTruthy();
+    expect(getByText('V 2.0.4 Momentum')).toBeTruthy();
   });
 });

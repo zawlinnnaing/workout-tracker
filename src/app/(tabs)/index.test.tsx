@@ -97,9 +97,9 @@ describe('HomeScreen', () => {
   });
 
   describe('empty state', () => {
-    it('shows KINETIC header', () => {
+    it('shows Momentum header', () => {
       renderHome();
-      expect(screen.getByText('KINETIC')).toBeTruthy();
+      expect(screen.getByText('Momentum')).toBeTruthy();
     });
 
     it('shows no workouts message', () => {
