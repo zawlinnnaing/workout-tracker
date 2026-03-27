@@ -1,3 +1,4 @@
+import { MomentumLogo } from '@/components/MomentumLogo';
 import Dumbbell from '@/components/icons/Dumbbell';
 import History from '@/components/icons/History';
 import ListChecks from '@/components/icons/ListChecks';
@@ -58,7 +59,8 @@ export function SideDrawer({
       <DrawerBackdrop testID="drawer-backdrop" onPress={onClose} />
       <DrawerContent testID="drawer-panel" className="py-8">
         <DrawerBody>
-          <View className="mb-10 mt-4">
+          <View className="mb-10 mt-4 flex-row items-center gap-3">
+            <MomentumLogo size={28} />
             <Text className="text-3xl font-bold tracking-wider text-primary">
               Momentum
             </Text>

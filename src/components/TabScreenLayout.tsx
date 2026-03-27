@@ -1,3 +1,4 @@
+import { MomentumLogo } from '@/components/MomentumLogo';
 import { SideDrawer } from '@/components/SideDrawer';
 import { ThemedView } from '@/components/ThemedView';
 import Menu from '@/components/icons/Menu';
@@ -31,12 +32,13 @@ export function TabScreenLayout({
           >
             <Menu size={24} className="text-primary" />
           </Pressable>
-          <Text
-            className="absolute left-0 right-0 text-center text-xl font-bold tracking-widest"
+          <View
+            className="absolute left-0 right-0 flex-row items-center justify-center gap-2"
             pointerEvents="none"
           >
-            Momentum
-          </Text>
+            <MomentumLogo size={24} />
+            <Text className="text-xl font-bold tracking-widest">Momentum</Text>
+          </View>
           {headerRight && <View className="ml-auto">{headerRight}</View>}
         </View>
         {children}
