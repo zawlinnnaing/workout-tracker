@@ -49,7 +49,7 @@ describe('SideDrawer', () => {
     const { getByText } = render(
       <SideDrawer isOpen={true} onClose={jest.fn()} onNavigate={jest.fn()} />,
     );
-    expect(getByText('LOG')).toBeTruthy();
+    expect(getByText('LOGS')).toBeTruthy();
     expect(getByText('WORKOUTS')).toBeTruthy();
     expect(getByText('HISTORY')).toBeTruthy();
     expect(getByText('SETTINGS')).toBeTruthy();
@@ -70,8 +70,8 @@ describe('SideDrawer', () => {
     const { getByText } = render(
       <SideDrawer isOpen={true} onClose={onClose} onNavigate={onNavigate} />,
     );
-    fireEvent.press(getByText('LOG'));
-    expect(onNavigate).toHaveBeenCalledWith('/(tabs)/index');
+    fireEvent.press(getByText('LOGS'));
+    expect(onNavigate).toHaveBeenCalledWith('/(tabs)');
     expect(onClose).toHaveBeenCalled();
   });
 
@@ -85,7 +85,7 @@ describe('SideDrawer', () => {
       />,
     );
     // Active item text should still be rendered
-    expect(getByText('LOG')).toBeTruthy();
+    expect(getByText('LOGS')).toBeTruthy();
     expect(getByText('WORKOUTS')).toBeTruthy();
   });
 
@@ -101,14 +101,14 @@ describe('SideDrawer', () => {
     expect(getByText('WORKOUTS')).toBeTruthy();
   });
 
-  it('only calls onClose (not onNavigate) for items without a route', () => {
+  it('calls onNavigate and onClose when pressing HISTORY', () => {
     const onNavigate = jest.fn();
     const onClose = jest.fn();
     const { getByText } = render(
       <SideDrawer isOpen={true} onClose={onClose} onNavigate={onNavigate} />,
     );
     fireEvent.press(getByText('HISTORY'));
-    expect(onNavigate).not.toHaveBeenCalled();
+    expect(onNavigate).toHaveBeenCalledWith('/(tabs)/history');
     expect(onClose).toHaveBeenCalled();
   });
 });
