@@ -1,5 +1,4 @@
 import { Circle, CircleCheck, Dumbbell } from '@/components/icons';
-import { WorkoutCompletionProgress } from '@/components/WorkoutCompletionProgress';
 import { ThemedView } from '@/components/ThemedView';
 import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
@@ -10,6 +9,7 @@ import {
   ToastTitle,
   useToast,
 } from '@/components/ui/toast';
+import { WorkoutCompletionProgress } from '@/components/WorkoutCompletionProgress';
 import { WorkoutQuote } from '@/components/WorkoutQuote';
 import { WorkoutStats } from '@/components/WorkoutStats';
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -147,11 +147,6 @@ function ExerciseRow({
       >
         {Array.from({ length: exercise.numberOfSets }, (_, i) => (
           <View key={i}>
-            {i > 0 && (
-              <View
-                className={`mx-4 h-px ${isDark ? 'bg-white/10' : 'bg-black/10'}`}
-              />
-            )}
             <SetRow
               isCompleted={i < (exerciseLog?.completedSets ?? 0)}
               setNumber={i + 1}
