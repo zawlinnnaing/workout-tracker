@@ -10,9 +10,10 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.zhiyu.momentum"
+      "bundleIdentifier": "com.zen-suite.momentum"
     },
     "android": {
+      "package": "com.zensuite.momentum",
       "adaptiveIcon": {
         "backgroundColor": "#07070A",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
