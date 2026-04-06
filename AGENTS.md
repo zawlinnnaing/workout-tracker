@@ -180,7 +180,7 @@ function WorkoutCard({ id }: { id: string }) {
 - Always write unit tests for new components/logic you implement.
 - Never use `any` in TypeScript.
 - When asked to commit, only write a short message with conventional commits. Don't include Claude co-author.
-- Always run `npm run format`, `npm run test`, after you update any code.
+- Always run `npm run format`, `npm run test`, `npm run lint`, after you update any code.
 
 ## Delivery Guardrails
 

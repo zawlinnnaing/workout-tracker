@@ -1,8 +1,15 @@
 import { Circle, CircleCheck, Dumbbell } from '@/components/icons';
+import { WorkoutCompletionProgress } from '@/components/WorkoutCompletionProgress';
 import { ThemedView } from '@/components/ThemedView';
 import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
+import {
+  Toast,
+  ToastDescription,
+  ToastTitle,
+  useToast,
+} from '@/components/ui/toast';
 import { WorkoutQuote } from '@/components/WorkoutQuote';
 import { WorkoutStats } from '@/components/WorkoutStats';
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -10,6 +17,7 @@ import { useWorkoutRoutine } from '@/hooks/useWorkoutRoutine';
 import { useWorkouts } from '@/hooks/useWorkouts';
 import { Exercise, ExerciseLog, Workout, WorkoutLog } from '@/types/workout';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { useEffect, useRef } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 
 interface WorkoutLogViewProps {
@@ -219,6 +227,11 @@ function WorkoutLogView({
             </View>
           ) : (
             <View className="gap-6">
+              <WorkoutCompletionProgress
+                exercises={workout.exercises}
+                exerciseLogs={log?.exercises}
+                testID="workout-completion-progress"
+              />
               {workout.exercises.map((exercise) => (
                 <ExerciseRow
                   key={exercise.id}
@@ -232,10 +245,7 @@ function WorkoutLogView({
                   }
                 />
               ))}
-              <WorkoutStats
-                exercises={workout.exercises}
-                exerciseLogs={log?.exercises}
-              />
+              <WorkoutStats exercises={workout.exercises} />
             </View>
           )}
         </ScrollView>
@@ -249,8 +259,41 @@ function withWorkoutLog(Component: typeof WorkoutLogView) {
     const { id } = useLocalSearchParams<{ id: string }>();
     const { getWorkoutById } = useWorkouts();
     const { getLog, completeExercise, completeSet } = useWorkoutRoutine();
+    const toast = useToast();
+    const previousIsCompletedRef = useRef<boolean | null>(null);
 
     const workout = getWorkoutById(id!);
+    const log = workout ? getLog(workout.id) : undefined;
+    const isCompleted = !!log?.completedAt;
+
+    useEffect(() => {
+      if (!workout) {
+        previousIsCompletedRef.current = null;
+        return;
+      }
+
+      if (previousIsCompletedRef.current === null) {
+        previousIsCompletedRef.current = isCompleted;
+        return;
+      }
+
+      if (!previousIsCompletedRef.current && isCompleted) {
+        toast.show({
+          placement: 'top',
+          duration: 3200,
+          render: ({ id: toastId }) => (
+            <Toast nativeID={toastId} action="success">
+              <ToastTitle>Workout completed</ToastTitle>
+              <ToastDescription>
+                {`Great work! You completed ${workout.name} today.`}
+              </ToastDescription>
+            </Toast>
+          ),
+        });
+      }
+
+      previousIsCompletedRef.current = isCompleted;
+    }, [isCompleted, toast, workout]);
 
     if (!workout) {
       return (
@@ -259,8 +302,6 @@ function withWorkoutLog(Component: typeof WorkoutLogView) {
         </ThemedView>
       );
     }
-
-    const log = getLog(workout.id);
 
     return (
       <Component

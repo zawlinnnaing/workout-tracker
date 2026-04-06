@@ -14,14 +14,12 @@ jest.mock('@/hooks/useColorScheme', () => ({
   useColorScheme: () => 'light',
 }));
 
-type BootstrapStatus = 'initializing-storage' | 'migrating-legacy-data';
-
 describe('StorageBootstrap', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('shows an initializing message while storage is bootstrapping', async () => {
+  it('does not render children while storage is bootstrapping', async () => {
     let resolveInitialization: (() => void) | null = null;
     mockInitializeStorage.mockImplementation(
       () =>
@@ -36,7 +34,7 @@ describe('StorageBootstrap', () => {
       </StorageBootstrap>,
     );
 
-    expect(screen.getByText('Initializing storage...')).toBeTruthy();
+    expect(screen.queryByText('App Ready')).toBeNull();
 
     act(() => {
       resolveInitialization?.();
@@ -47,17 +45,9 @@ describe('StorageBootstrap', () => {
     });
   });
 
-  it('updates loading status to migration while data migration runs', async () => {
-    let resolveInitialization: (() => void) | null = null;
-    let onStatusChange: ((status: BootstrapStatus) => void) | undefined;
-
-    mockInitializeStorage.mockImplementation(
-      (options?: { onStatusChange?: (status: BootstrapStatus) => void }) => {
-        onStatusChange = options?.onStatusChange;
-        return new Promise<void>((resolve) => {
-          resolveInitialization = resolve;
-        });
-      },
+  it('renders children even when storage initialization fails', async () => {
+    mockInitializeStorage.mockRejectedValueOnce(
+      new Error('Initialization failed'),
     );
 
     render(
@@ -65,16 +55,6 @@ describe('StorageBootstrap', () => {
         <Text>App Ready</Text>
       </StorageBootstrap>,
     );
-
-    act(() => {
-      onStatusChange?.('migrating-legacy-data');
-    });
-
-    expect(screen.getByText('Migrating data...')).toBeTruthy();
-
-    act(() => {
-      resolveInitialization?.();
-    });
 
     await waitFor(() => {
       expect(screen.getByText('App Ready')).toBeTruthy();

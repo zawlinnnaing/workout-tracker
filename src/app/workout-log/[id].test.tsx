@@ -34,6 +34,7 @@ const mockCompleteExercise = jest.fn();
 const mockCompleteSet = jest.fn();
 const mockGetLog = jest.fn(() => mockLog);
 const mockGetWorkoutById = jest.fn(() => mockWorkout);
+const mockToastShow = jest.fn();
 
 jest.mock('@/hooks/useWorkouts', () => ({
   useWorkouts: () => ({ getWorkoutById: mockGetWorkoutById }),
@@ -45,6 +46,23 @@ jest.mock('@/hooks/useWorkoutRoutine', () => ({
     completeExercise: mockCompleteExercise,
     completeSet: mockCompleteSet,
   }),
+}));
+jest.mock('@/components/ui/toast', () => ({
+  useToast: () => ({
+    show: mockToastShow,
+  }),
+  Toast: ({ children }: { children: React.ReactNode }) => {
+    const { View } = require('react-native');
+    return <View>{children}</View>;
+  },
+  ToastTitle: ({ children }: { children: React.ReactNode }) => {
+    const { Text } = require('react-native');
+    return <Text>{children}</Text>;
+  },
+  ToastDescription: ({ children }: { children: React.ReactNode }) => {
+    const { Text } = require('react-native');
+    return <Text>{children}</Text>;
+  },
 }));
 
 // Import after mocks
@@ -61,6 +79,7 @@ describe('WorkoutLogScreen', () => {
     mockCompleteSet.mockClear();
     mockGetLog.mockReturnValue(mockLog);
     mockGetWorkoutById.mockReturnValue(mockWorkout);
+    mockToastShow.mockClear();
   });
 
   it('shows exercise names', () => {
@@ -71,8 +90,12 @@ describe('WorkoutLogScreen', () => {
 
   it('shows workout stats with completion rate', () => {
     renderScreen();
-    expect(screen.getByText('Completion')).toBeTruthy();
     expect(screen.getByText('Volume')).toBeTruthy();
+  });
+
+  it('shows completion progress near the top of the workout log', () => {
+    renderScreen();
+    expect(screen.getByTestId('workout-completion-progress')).toBeTruthy();
   });
 
   it('shows workout name in header', () => {
@@ -117,5 +140,28 @@ describe('WorkoutLogScreen', () => {
     mockGetWorkoutById.mockReturnValue({ ...mockWorkout, exercises: [] });
     renderScreen();
     expect(screen.getByText('No Exercises Yet')).toBeTruthy();
+  });
+
+  it('shows completion toast once when workout transitions to completed', () => {
+    const incompleteLog = { ...mockLog, completedAt: undefined };
+    const completedLog = { ...mockLog, completedAt: new Date() };
+
+    mockGetLog.mockReturnValueOnce(incompleteLog).mockReturnValue(completedLog);
+
+    const { rerender } = renderScreen();
+    rerender(<WorkoutLogScreen />);
+
+    expect(mockToastShow).toHaveBeenCalledTimes(1);
+    expect(mockToastShow).toHaveBeenCalledWith(
+      expect.objectContaining({
+        placement: 'top',
+      }),
+    );
+  });
+
+  it('does not show completion toast on first render when already completed', () => {
+    mockGetLog.mockReturnValue({ ...mockLog, completedAt: new Date() });
+    renderScreen();
+    expect(mockToastShow).not.toHaveBeenCalled();
   });
 });
