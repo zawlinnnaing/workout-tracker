@@ -1,15 +1,12 @@
-import DateTimePicker, {
-  DateTimePickerEvent,
-} from '@react-native-community/datetimepicker';
 import Monitor from '@/components/icons/Monitor';
 import Moon from '@/components/icons/Moon';
 import Sun from '@/components/icons/Sun';
 import { SettingsLegalRow } from '@/components/settings/SettingsLegalRow';
+import { SettingsDefaultInput } from '@/components/settings/SettingsDefaultInput';
 import { SettingsNotificationPreview } from '@/components/settings/SettingsNotificationPreview';
 import { SettingsNumericStepper } from '@/components/settings/SettingsNumericStepper';
 import { SettingsStatusCallout } from '@/components/settings/SettingsStatusCallout';
 import { SettingsThemeOption } from '@/components/settings/SettingsThemeOption';
-import { Input, InputField } from '@/components/ui/input';
 import { Text } from '@/components/ui/text';
 import { useSettings } from '@/hooks/useSettings';
 import { useWorkoutHistory } from '@/hooks/useWorkoutHistory';
@@ -27,8 +24,11 @@ import {
   getNextWorkout,
 } from '@/notifications/workoutReminderUtils';
 import { ExerciseDefaults, ThemeMode } from '@/types/settings-types';
-import { getWorkoutQuote } from '@/utils/workoutQuotes';
 import { cn } from '@/utils/styles';
+import { getWorkoutQuote } from '@/utils/workoutQuotes';
+import DateTimePicker, {
+  DateTimePickerEvent,
+} from '@react-native-community/datetimepicker';
 import React, { useEffect, useMemo, useState } from 'react';
 import { AppState, Platform, Pressable, ScrollView, View } from 'react-native';
 
@@ -93,11 +93,8 @@ export function SettingsView({
 
   return (
     <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-      <View className="pb-20">
-        <View className="mb-12 mt-2 gap-4">
-          <Text className="text-[11px] font-bold uppercase tracking-[0.38em] opacity-40">
-            Control Room
-          </Text>
+      <View className="mt-4 pb-20">
+        <View className="mb-12 gap-4">
           <Text className="max-w-[280px] text-5xl font-extrabold uppercase tracking-[0.06em]">
             Settings
           </Text>
@@ -121,9 +118,8 @@ export function SettingsView({
                   <Sun
                     size={16}
                     className={cn(
-                      theme === 'light'
-                        ? 'text-typography-0 dark:text-typography-950'
-                        : 'text-primary opacity-40',
+                      'text-typography-0 dark:text-typography-0',
+                      theme !== 'light' && 'opacity-80',
                     )}
                   />
                 }
@@ -136,9 +132,8 @@ export function SettingsView({
                   <Moon
                     size={16}
                     className={cn(
-                      theme === 'dark'
-                        ? 'text-typography-0 dark:text-typography-950'
-                        : 'text-primary opacity-40',
+                      'text-typography-950 dark:text-typography-950',
+                      theme !== 'dark' && 'opacity-80',
                     )}
                   />
                 }
@@ -150,11 +145,13 @@ export function SettingsView({
                 icon={
                   <Monitor
                     size={16}
-                    className={cn(
-                      theme === 'system'
-                        ? 'text-typography-0 dark:text-typography-950'
-                        : 'text-primary opacity-40',
-                    )}
+                    className={cn({
+                      'text-typography-0': theme === 'system',
+                      'text-typography-950 dark:text-typography-950':
+                        theme === 'light',
+                      'text-typography-0 dark:text-typography-0':
+                        theme === 'dark',
+                    })}
                   />
                 }
               />
@@ -171,75 +168,54 @@ export function SettingsView({
             once and let the routine inherit the structure.
           </Text>
           <View className="flex-row gap-3">
-            <View className="flex-1 items-center rounded-[28px] bg-background-50 px-3 py-5 dark:bg-background-900">
-              <Text className="mb-3 text-[11px] font-bold uppercase tracking-[0.28em] opacity-45">
-                Sets
-              </Text>
-              <Input variant="underlined" size="6xl" className="w-full">
-                <InputField
-                  testID="default-sets-input"
-                  value={defaultSets.toString()}
-                  onChangeText={(value) => {
-                    const num = parseInt(value, 10);
-                    if (value === '' || (!isNaN(num) && num >= 0)) {
-                      onDefaultsChange({ sets: isNaN(num) ? 0 : num });
-                    }
-                  }}
-                  keyboardType="numeric"
-                  placeholder="0"
-                  className="text-center font-extrabold"
-                />
-              </Input>
-            </View>
-            <View className="flex-1 items-center rounded-[28px] bg-background-50 px-3 py-5 dark:bg-background-900">
-              <Text className="mb-3 text-[11px] font-bold uppercase tracking-[0.28em] opacity-45">
-                Reps
-              </Text>
-              <Input variant="underlined" size="6xl" className="w-full">
-                <InputField
-                  testID="default-reps-input"
-                  value={defaultReps.toString()}
-                  onChangeText={(value) => {
-                    const num = parseInt(value, 10);
-                    if (value === '' || (!isNaN(num) && num >= 0)) {
-                      onDefaultsChange({ reps: isNaN(num) ? 0 : num });
-                    }
-                  }}
-                  keyboardType="numeric"
-                  placeholder="0"
-                  className="text-center font-extrabold"
-                />
-              </Input>
-            </View>
-            <View className="flex-1 items-center rounded-[28px] bg-background-50 px-3 py-5 dark:bg-background-900">
-              <Text className="mb-3 text-[11px] font-bold uppercase tracking-[0.28em] opacity-45">
-                Kg
-              </Text>
-              <Input variant="underlined" size="6xl" className="w-full">
-                <InputField
-                  testID="default-weight-input"
-                  value={defaultWeight?.toString() ?? ''}
-                  onChangeText={(value) => {
-                    if (value === '') {
-                      onDefaultsChange({ weight: undefined });
-                      return;
-                    }
+            <SettingsDefaultInput
+              label="Sets"
+              testID="default-sets-input"
+              value={defaultSets.toString()}
+              onChangeText={(value) => {
+                const num = parseInt(value, 10);
+                if (value === '' || (!isNaN(num) && num >= 0)) {
+                  onDefaultsChange({ sets: isNaN(num) ? 0 : num });
+                }
+              }}
+              keyboardType="numeric"
+              placeholder="0"
+            />
+            <SettingsDefaultInput
+              label="Reps"
+              testID="default-reps-input"
+              value={defaultReps.toString()}
+              onChangeText={(value) => {
+                const num = parseInt(value, 10);
+                if (value === '' || (!isNaN(num) && num >= 0)) {
+                  onDefaultsChange({ reps: isNaN(num) ? 0 : num });
+                }
+              }}
+              keyboardType="numeric"
+              placeholder="0"
+            />
+            <SettingsDefaultInput
+              label="Kg"
+              testID="default-weight-input"
+              value={defaultWeight?.toString() ?? ''}
+              onChangeText={(value) => {
+                if (value === '') {
+                  onDefaultsChange({ weight: undefined });
+                  return;
+                }
 
-                    if (!/^\d*\.?\d*$/.test(value)) {
-                      return;
-                    }
+                if (!/^\d*\.?\d*$/.test(value)) {
+                  return;
+                }
 
-                    const num = parseFloat(value);
-                    if (!isNaN(num) && num >= 0) {
-                      onDefaultsChange({ weight: num });
-                    }
-                  }}
-                  keyboardType="decimal-pad"
-                  placeholder="—"
-                  className="text-center font-extrabold"
-                />
-              </Input>
-            </View>
+                const num = parseFloat(value);
+                if (!isNaN(num) && num >= 0) {
+                  onDefaultsChange({ weight: num });
+                }
+              }}
+              keyboardType="decimal-pad"
+              placeholder="—"
+            />
           </View>
         </View>
 
