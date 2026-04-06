@@ -14,20 +14,20 @@ import { Text, View } from 'react-native';
 const SCOPE = 'ALERT';
 
 const alertStyle = tva({
-  base: 'items-center py-3 px-4 rounded-md flex-row gap-2 border-outline-100',
+  base: 'items-center py-3 px-4 rounded-md flex-row gap-2 border-[0.5px]',
 
   variants: {
     action: {
-      error: 'bg-background-error',
-      warning: 'bg-background-warning',
-      success: 'bg-background-success',
-      info: 'bg-background-info',
-      muted: 'bg-background-muted',
+      error: 'bg-background-error border-error-200',
+      warning: 'bg-background-warning border-warning-200',
+      success: 'bg-background-success border-success-200',
+      info: 'bg-background-info border-info-200',
+      muted: 'bg-background-muted border-outline-200',
     },
 
     variant: {
       solid: '',
-      outline: 'border bg-background-0',
+      outline: 'bg-background-0',
     },
   },
 });

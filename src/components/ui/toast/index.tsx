@@ -26,25 +26,25 @@ const SCOPE = 'TOAST';
 cssInterop(MotionView, { className: 'style' });
 
 const toastStyle = tva({
-  base: 'p-4 m-1 rounded-md gap-1 web:pointer-events-auto shadow-hard-5 border-outline-100',
+  base: 'p-4 m-1 rounded-md gap-1 border-[0.5px] web:pointer-events-auto shadow-hard-5',
   variants: {
     action: {
-      error: 'bg-error-800',
-      warning: 'bg-warning-700',
-      success: 'bg-success-700',
-      info: 'bg-info-700',
-      muted: 'bg-background-800',
+      error: 'bg-background-error border-error-200',
+      warning: 'bg-background-warning border-warning-200',
+      success: 'bg-background-success border-success-200',
+      info: 'bg-background-info border-info-200',
+      muted: 'bg-background-muted border-outline-200',
     },
 
     variant: {
       solid: '',
-      outline: 'border bg-background-0',
+      outline: 'bg-background-0',
     },
   },
 });
 
 const toastTitleStyle = tva({
-  base: 'text-typography-0 font-medium font-body tracking-md text-left',
+  base: 'font-medium font-body tracking-md text-left',
   variants: {
     isTruncated: {
       true: '',
@@ -78,40 +78,13 @@ const toastTitleStyle = tva({
       outline: '',
     },
     action: {
-      error: '',
-      warning: '',
-      success: '',
-      info: '',
-      muted: '',
+      error: 'text-error-800',
+      warning: 'text-warning-800',
+      success: 'text-success-800',
+      info: 'text-info-800',
+      muted: 'text-typography-900',
     },
   },
-  parentCompoundVariants: [
-    {
-      variant: 'outline',
-      action: 'error',
-      class: 'text-error-800',
-    },
-    {
-      variant: 'outline',
-      action: 'warning',
-      class: 'text-warning-800',
-    },
-    {
-      variant: 'outline',
-      action: 'success',
-      class: 'text-success-800',
-    },
-    {
-      variant: 'outline',
-      action: 'info',
-      class: 'text-info-800',
-    },
-    {
-      variant: 'outline',
-      action: 'muted',
-      class: 'text-background-800',
-    },
-  ],
 });
 
 const toastDescriptionStyle = tva({
@@ -144,9 +117,12 @@ const toastDescriptionStyle = tva({
     },
   },
   parentVariants: {
-    variant: {
-      solid: 'text-typography-50',
-      outline: 'text-typography-900',
+    action: {
+      error: 'text-error-800',
+      warning: 'text-warning-800',
+      success: 'text-success-800',
+      info: 'text-info-800',
+      muted: 'text-typography-700',
     },
   },
 });
@@ -217,7 +193,7 @@ const ToastDescription = React.forwardRef<
   React.ComponentRef<typeof Text>,
   IToastDescriptionProps
 >(function ToastDescription({ className, size = 'md', ...props }, ref) {
-  const { variant: parentVariant } = useStyleContext(SCOPE);
+  const { action: parentAction } = useStyleContext(SCOPE);
   return (
     <Text
       ref={ref}
@@ -226,7 +202,7 @@ const ToastDescription = React.forwardRef<
         size,
         class: className,
         parentVariants: {
-          variant: parentVariant,
+          action: parentAction,
         },
       })}
     />
@@ -238,4 +214,3 @@ ToastTitle.displayName = 'ToastTitle';
 ToastDescription.displayName = 'ToastDescription';
 
 export { Toast, ToastDescription, ToastTitle, useToast };
-
