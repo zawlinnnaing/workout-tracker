@@ -1,5 +1,6 @@
 import { AppSettings } from '@/types/settings-types';
 import { ExerciseLog, Workout, WorkoutLog } from '@/types/workout';
+import { normalizeSettings } from '@/utils/settings';
 
 type SerializedWorkout = Omit<Workout, 'createdAt' | 'completedAt'> & {
   createdAt: string;
@@ -99,7 +100,7 @@ export function serializeLegacyWorkoutHistory(logs: WorkoutLog[]): string {
 
 export function parseLegacySettings(raw: string | null): AppSettings | null {
   if (!raw) return null;
-  return JSON.parse(raw) as AppSettings;
+  return normalizeSettings(JSON.parse(raw) as Partial<AppSettings>);
 }
 
 export function serializeLegacySettings(settings: AppSettings): string {

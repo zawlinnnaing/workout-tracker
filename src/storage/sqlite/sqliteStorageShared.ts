@@ -2,9 +2,10 @@ import * as SQLite from 'expo-sqlite';
 
 import { AppSettings } from '@/types/settings-types';
 import { Exercise, ExerciseLog, Workout, WorkoutLog } from '@/types/workout';
+import { DEFAULT_NOTIFICATION_SETTINGS } from '@/utils/settings';
 
 const DATABASE_NAME = 'momentum.db';
-const DATABASE_VERSION = 1;
+const DATABASE_VERSION = 2;
 
 export type DbClient = Pick<
   SQLite.SQLiteDatabase,
@@ -83,6 +84,12 @@ export type SettingsRow = {
   exercise_defaults_reps: number;
   exercise_defaults_sets: number;
   exercise_defaults_weight: number | null;
+  notifications_enabled: number;
+  notifications_workout_days: number;
+  notifications_break_days: number;
+  notifications_send_hour: number;
+  notifications_send_minute: number;
+  notifications_pattern_anchor_date: string | null;
 };
 
 let dbPromise: Promise<SQLite.SQLiteDatabase> | null = null;
@@ -241,6 +248,28 @@ async function createSchemaV1(db: DbClient): Promise<void> {
   `);
 }
 
+async function migrateSchemaV2(db: DbClient): Promise<void> {
+  await db.execAsync(`
+    ALTER TABLE app_settings
+      ADD COLUMN notifications_enabled INTEGER NOT NULL DEFAULT 0;
+
+    ALTER TABLE app_settings
+      ADD COLUMN notifications_workout_days INTEGER NOT NULL DEFAULT 3;
+
+    ALTER TABLE app_settings
+      ADD COLUMN notifications_break_days INTEGER NOT NULL DEFAULT 1;
+
+    ALTER TABLE app_settings
+      ADD COLUMN notifications_send_hour INTEGER NOT NULL DEFAULT 19;
+
+    ALTER TABLE app_settings
+      ADD COLUMN notifications_send_minute INTEGER NOT NULL DEFAULT 0;
+
+    ALTER TABLE app_settings
+      ADD COLUMN notifications_pattern_anchor_date TEXT;
+  `);
+}
+
 export async function initializeSchema(db: DbClient): Promise<void> {
   const versionRow = await db.getFirstAsync<{ user_version: number }>(
     'PRAGMA user_version;',
@@ -254,6 +283,10 @@ export async function initializeSchema(db: DbClient): Promise<void> {
 
   if (currentVersion === 0) {
     await createSchemaV1(db);
+  }
+
+  if (currentVersion < 2) {
+    await migrateSchemaV2(db);
   }
 
   await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION};`);
@@ -457,13 +490,26 @@ export async function upsertSettings(
       theme,
       exercise_defaults_reps,
       exercise_defaults_sets,
-      exercise_defaults_weight
-    ) VALUES (1, ?, ?, ?, ?);`,
+      exercise_defaults_weight,
+      notifications_enabled,
+      notifications_workout_days,
+      notifications_break_days,
+      notifications_send_hour,
+      notifications_send_minute,
+      notifications_pattern_anchor_date
+    ) VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
     [
       settings.theme,
       settings.exerciseDefaults.reps,
       settings.exerciseDefaults.sets,
       settings.exerciseDefaults.weight ?? null,
+      settings.notifications.enabled ? 1 : 0,
+      settings.notifications.workoutDays,
+      settings.notifications.breakDays,
+      settings.notifications.sendHour,
+      settings.notifications.sendMinute,
+      settings.notifications.patternAnchorDate ??
+        DEFAULT_NOTIFICATION_SETTINGS.patternAnchorDate,
     ],
   );
 }

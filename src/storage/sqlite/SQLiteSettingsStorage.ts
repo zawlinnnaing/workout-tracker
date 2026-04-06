@@ -1,6 +1,7 @@
 import { SettingsStorage } from '../SettingsStorage';
 
 import { AppSettings } from '@/types/settings-types';
+import { normalizeSettings } from '@/utils/settings';
 
 import {
   SettingsRow,
@@ -18,7 +19,13 @@ export class SQLiteSettingsStorage implements SettingsStorage {
         theme,
         exercise_defaults_reps,
         exercise_defaults_sets,
-        exercise_defaults_weight
+        exercise_defaults_weight,
+        notifications_enabled,
+        notifications_workout_days,
+        notifications_break_days,
+        notifications_send_hour,
+        notifications_send_minute,
+        notifications_pattern_anchor_date
       FROM app_settings
       WHERE id = 1;`,
     );
@@ -27,14 +34,22 @@ export class SQLiteSettingsStorage implements SettingsStorage {
       return null;
     }
 
-    return {
+    return normalizeSettings({
       theme: row.theme,
       exerciseDefaults: {
         reps: row.exercise_defaults_reps,
         sets: row.exercise_defaults_sets,
         weight: row.exercise_defaults_weight ?? undefined,
       },
-    };
+      notifications: {
+        enabled: row.notifications_enabled === 1,
+        workoutDays: row.notifications_workout_days,
+        breakDays: row.notifications_break_days,
+        sendHour: row.notifications_send_hour,
+        sendMinute: row.notifications_send_minute,
+        patternAnchorDate: row.notifications_pattern_anchor_date,
+      },
+    });
   }
 
   async save(settings: AppSettings): Promise<void> {

@@ -38,7 +38,9 @@
           }
         }
       ],
+      "expo-notifications",
       "expo-sqlite",
+      "expo-background-task",
       [
         "expo-splash-screen",
         {

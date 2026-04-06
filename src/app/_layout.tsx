@@ -10,6 +10,7 @@ import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { useSettings } from '@/hooks/useSettings';
 import { GluestackProvider } from '@/providers/GluestackProvider';
+import { NotificationProvider } from '@/providers/NotificationProvider';
 import { SettingsProvider } from '@/providers/SettingsProvider';
 import { StorageBootstrap } from '@/providers/StorageBootstrap';
 import { WorkoutHistoryProvider } from '@/providers/WorkoutHistoryProvider';
@@ -18,6 +19,7 @@ import { WorkoutRoutineProvider } from '@/providers/WorkoutRoutineProvider';
 
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import '@/global.css';
+import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export const unstable_settings = {
@@ -35,23 +37,25 @@ function ThemedApp() {
     <WorkoutProvider>
       <WorkoutRoutineProvider>
         <WorkoutHistoryProvider>
-          <ThemeProvider
-            value={effectiveColorScheme === 'dark' ? DarkTheme : DefaultTheme}
-          >
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="workout/[id]"
-                options={{ headerShown: true }}
-              />
-              <Stack.Screen
-                name="workout-log/[id]"
-                options={{ headerShown: true }}
-              />
-              <Stack.Screen name="settings" options={{ headerShown: true }} />
-            </Stack>
-            <StatusBar style="auto" />
-          </ThemeProvider>
+          <NotificationProvider>
+            <ThemeProvider
+              value={effectiveColorScheme === 'dark' ? DarkTheme : DefaultTheme}
+            >
+              <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="workout/[id]"
+                  options={{ headerShown: true }}
+                />
+                <Stack.Screen
+                  name="workout-log/[id]"
+                  options={{ headerShown: true }}
+                />
+                <Stack.Screen name="settings" options={{ headerShown: true }} />
+              </Stack>
+              <StatusBar style="auto" />
+            </ThemeProvider>
+          </NotificationProvider>
         </WorkoutHistoryProvider>
       </WorkoutRoutineProvider>
     </WorkoutProvider>
@@ -61,7 +65,7 @@ function ThemedApp() {
 export default function RootLayout() {
   return (
     <StorageBootstrap>
-      <GestureHandlerRootView style={{ flex: 1 }}>
+      <GestureHandlerRootView style={styles.root}>
         <ErrorBoundary>
           <SettingsProvider>
             <GluestackProvider>
@@ -73,3 +77,9 @@ export default function RootLayout() {
     </StorageBootstrap>
   );
 }
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
+});
