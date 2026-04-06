@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react-native';
 
 import { workoutHistoryStorage } from '@/storage';
-import { useWorkoutLogStore } from '@/store/workoutLogStore';
+import { useWorkoutRoutineStore } from '@/store/workoutRoutineStore';
 import { WorkoutLog } from '@/types/workout';
 
 import { useSyncHistoryFromLogs } from './useSyncHistoryFromLogs';
@@ -53,14 +53,14 @@ const logWithCompletedExercise: WorkoutLog = {
 
 beforeEach(() => {
   jest.clearAllMocks();
-  useWorkoutLogStore.setState({ workoutLogs: {}, isLoaded: false });
+  useWorkoutRoutineStore.setState({ workoutLogs: {}, isLoaded: false });
   mockLoad.mockResolvedValue([]);
   mockSave.mockResolvedValue(undefined);
 });
 
 describe('useSyncHistoryFromLogs', () => {
   it('does not write to storage when no logs have completions', () => {
-    useWorkoutLogStore.setState({
+    useWorkoutRoutineStore.setState({
       workoutLogs: { log1: incompleteLog },
       isLoaded: true,
     });
@@ -74,7 +74,7 @@ describe('useSyncHistoryFromLogs', () => {
     renderHook(() => useSyncHistoryFromLogs());
 
     await act(async () => {
-      useWorkoutLogStore.setState({
+      useWorkoutRoutineStore.setState({
         workoutLogs: { log1: completedWorkoutLog },
         isLoaded: true,
       });
@@ -87,7 +87,7 @@ describe('useSyncHistoryFromLogs', () => {
     renderHook(() => useSyncHistoryFromLogs());
 
     await act(async () => {
-      useWorkoutLogStore.setState({
+      useWorkoutRoutineStore.setState({
         workoutLogs: { log2: logWithCompletedExercise },
         isLoaded: true,
       });
@@ -122,7 +122,7 @@ describe('useSyncHistoryFromLogs', () => {
     renderHook(() => useSyncHistoryFromLogs());
 
     await act(async () => {
-      useWorkoutLogStore.setState({
+      useWorkoutRoutineStore.setState({
         workoutLogs: { log1: updatedLog },
         isLoaded: true,
       });

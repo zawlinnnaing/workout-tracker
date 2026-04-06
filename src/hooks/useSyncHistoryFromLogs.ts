@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 
 import { workoutHistoryStorage } from '@/storage';
 import { useWorkoutHistoryStore } from '@/store/workoutHistoryStore';
-import { useWorkoutLogStore } from '@/store/workoutLogStore';
+import { useWorkoutRoutineStore } from '@/store/workoutRoutineStore';
 
 export function useSyncHistoryFromLogs() {
-  const workoutLogs = useWorkoutLogStore((state) => state.workoutLogs);
+  const workoutLogs = useWorkoutRoutineStore((state) => state.workoutLogs);
   const setHistory = useWorkoutHistoryStore((state) => state.setHistory);
 
   useEffect(() => {

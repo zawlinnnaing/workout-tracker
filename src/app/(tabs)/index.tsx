@@ -6,7 +6,7 @@ import RotateCcw from '@/components/icons/RotateCcw';
 import { Card } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
-import { useWorkoutLogs } from '@/hooks/useWorkoutLogs';
+import { useWorkoutRoutine } from '@/hooks/useWorkoutRoutine';
 import { useWorkouts } from '@/hooks/useWorkouts';
 import { Workout, WorkoutLog } from '@/types/workout';
 import { useRouter } from 'expo-router';
@@ -107,7 +107,7 @@ function withHome(Component: typeof HomeView) {
   return function HomeContainer() {
     const { workouts } = useWorkouts();
     const { workoutLogs, toggleWorkoutComplete, restartRoutine } =
-      useWorkoutLogs();
+      useWorkoutRoutine();
     const router = useRouter();
 
     return (

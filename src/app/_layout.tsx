@@ -8,9 +8,10 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
 import { WorkoutHistoryProvider } from '@/providers/WorkoutHistoryProvider';
-import { WorkoutLogProvider } from '@/providers/WorkoutLogProvider';
+import { WorkoutRoutineProvider } from '@/providers/WorkoutRoutineProvider';
 import { WorkoutProvider } from '@/providers/WorkoutProvider';
 import { SettingsProvider } from '@/providers/SettingsProvider';
+import { StorageBootstrap } from '@/providers/StorageBootstrap';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { useSettings } from '@/hooks/useSettings';
 
@@ -33,7 +34,7 @@ function ThemedApp() {
   return (
     <GluestackUIProvider mode={settings.theme}>
       <WorkoutProvider>
-        <WorkoutLogProvider>
+        <WorkoutRoutineProvider>
           <WorkoutHistoryProvider>
             <ThemeProvider
               value={effectiveColorScheme === 'dark' ? DarkTheme : DefaultTheme}
@@ -53,7 +54,7 @@ function ThemedApp() {
               <StatusBar style="auto" />
             </ThemeProvider>
           </WorkoutHistoryProvider>
-        </WorkoutLogProvider>
+        </WorkoutRoutineProvider>
       </WorkoutProvider>
     </GluestackUIProvider>
   );
@@ -63,9 +64,11 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ErrorBoundary>
-        <SettingsProvider>
-          <ThemedApp />
-        </SettingsProvider>
+        <StorageBootstrap>
+          <SettingsProvider>
+            <ThemedApp />
+          </SettingsProvider>
+        </StorageBootstrap>
       </ErrorBoundary>
     </GestureHandlerRootView>
   );

@@ -26,8 +26,8 @@ const mockRestartRoutine = jest.fn();
 jest.mock('@/hooks/useWorkouts', () => ({
   useWorkouts: () => ({ workouts: mockWorkouts }),
 }));
-jest.mock('@/hooks/useWorkoutLogs', () => ({
-  useWorkoutLogs: () => ({
+jest.mock('@/hooks/useWorkoutRoutine', () => ({
+  useWorkoutRoutine: () => ({
     workoutLogs: mockWorkoutLogs,
     toggleWorkoutComplete: mockToggleWorkoutComplete,
     restartRoutine: mockRestartRoutine,
@@ -38,8 +38,8 @@ jest.mock('@/providers/WorkoutProvider', () => ({
     <>{children}</>
   ),
 }));
-jest.mock('@/providers/WorkoutLogProvider', () => ({
-  WorkoutLogProvider: ({ children }: { children: React.ReactNode }) => (
+jest.mock('@/providers/WorkoutRoutineProvider', () => ({
+  WorkoutRoutineProvider: ({ children }: { children: React.ReactNode }) => (
     <>{children}</>
   ),
 }));

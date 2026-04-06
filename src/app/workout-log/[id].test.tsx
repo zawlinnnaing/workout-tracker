@@ -38,8 +38,8 @@ const mockGetWorkoutById = jest.fn(() => mockWorkout);
 jest.mock('@/hooks/useWorkouts', () => ({
   useWorkouts: () => ({ getWorkoutById: mockGetWorkoutById }),
 }));
-jest.mock('@/hooks/useWorkoutLogs', () => ({
-  useWorkoutLogs: () => ({
+jest.mock('@/hooks/useWorkoutRoutine', () => ({
+  useWorkoutRoutine: () => ({
     workoutLogs: {},
     getLog: mockGetLog,
     completeExercise: mockCompleteExercise,

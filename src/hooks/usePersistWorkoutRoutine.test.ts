@@ -1,10 +1,10 @@
 import { act, renderHook } from '@testing-library/react-native';
 
 import { workoutLogStorage } from '@/storage';
-import { useWorkoutLogStore } from '@/store/workoutLogStore';
+import { useWorkoutRoutineStore } from '@/store/workoutRoutineStore';
 import { WorkoutLog } from '@/types/workout';
 
-import { usePersistWorkoutLogs } from './usePersistWorkoutLogs';
+import { usePersistWorkoutRoutine } from './usePersistWorkoutRoutine';
 
 jest.mock('@/storage', () => ({
   workoutLogStorage: {
@@ -31,32 +31,38 @@ const mockLogs: Record<string, WorkoutLog> = {
 
 beforeEach(() => {
   jest.clearAllMocks();
-  useWorkoutLogStore.setState({ workoutLogs: {}, isLoaded: false });
+  useWorkoutRoutineStore.setState({ workoutLogs: {}, isLoaded: false });
   mockSave.mockResolvedValue(undefined);
 });
 
-describe('usePersistWorkoutLogs', () => {
+describe('usePersistWorkoutRoutine', () => {
   it('does not save to storage before logs are loaded', () => {
-    renderHook(() => usePersistWorkoutLogs());
+    renderHook(() => usePersistWorkoutRoutine());
 
     expect(mockSave).not.toHaveBeenCalled();
   });
 
   it('saves to storage when logs change after load', () => {
-    renderHook(() => usePersistWorkoutLogs());
+    renderHook(() => usePersistWorkoutRoutine());
 
     act(() => {
-      useWorkoutLogStore.setState({ workoutLogs: mockLogs, isLoaded: true });
+      useWorkoutRoutineStore.setState({
+        workoutLogs: mockLogs,
+        isLoaded: true,
+      });
     });
 
     expect(mockSave).toHaveBeenCalledWith(mockLogs);
   });
 
   it('saves again when logs are updated', () => {
-    renderHook(() => usePersistWorkoutLogs());
+    renderHook(() => usePersistWorkoutRoutine());
 
     act(() => {
-      useWorkoutLogStore.setState({ workoutLogs: mockLogs, isLoaded: true });
+      useWorkoutRoutineStore.setState({
+        workoutLogs: mockLogs,
+        isLoaded: true,
+      });
     });
 
     const updated: Record<string, WorkoutLog> = {
@@ -64,7 +70,7 @@ describe('usePersistWorkoutLogs', () => {
       w1: { ...mockLogs.w1, completedAt: new Date() },
     };
     act(() => {
-      useWorkoutLogStore.setState({ workoutLogs: updated });
+      useWorkoutRoutineStore.setState({ workoutLogs: updated });
     });
 
     expect(mockSave).toHaveBeenCalledTimes(2);

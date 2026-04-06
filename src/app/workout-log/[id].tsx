@@ -6,7 +6,7 @@ import { Text } from '@/components/ui/text';
 import { WorkoutQuote } from '@/components/WorkoutQuote';
 import { WorkoutStats } from '@/components/WorkoutStats';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { useWorkoutLogs } from '@/hooks/useWorkoutLogs';
+import { useWorkoutRoutine } from '@/hooks/useWorkoutRoutine';
 import { useWorkouts } from '@/hooks/useWorkouts';
 import { Exercise, ExerciseLog, Workout, WorkoutLog } from '@/types/workout';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
@@ -248,7 +248,7 @@ function withWorkoutLog(Component: typeof WorkoutLogView) {
   return function WorkoutLogContainer() {
     const { id } = useLocalSearchParams<{ id: string }>();
     const { getWorkoutById } = useWorkouts();
-    const { getLog, completeExercise, completeSet } = useWorkoutLogs();
+    const { getLog, completeExercise, completeSet } = useWorkoutRoutine();
 
     const workout = getWorkoutById(id!);
 
