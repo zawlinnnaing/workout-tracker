@@ -265,6 +265,11 @@ describe('workoutRoutineStore', () => {
       const log = result.current.getLog('w1');
       expect(log?.completedAt).toBeInstanceOf(Date);
       expect(log?.exercises.every((e) => !!e.completedAt)).toBe(true);
+      expect(
+        log?.exercises.every(
+          (e) => e.completedSets === e.exercise.numberOfSets,
+        ),
+      ).toBe(true);
     });
 
     it('clears all completions when called again on a completed workout', () => {
@@ -281,6 +286,7 @@ describe('workoutRoutineStore', () => {
       const log = result.current.getLog('w1');
       expect(log?.completedAt).toBeUndefined();
       expect(log?.exercises.every((e) => !e.completedAt)).toBe(true);
+      expect(log?.exercises.every((e) => e.completedSets === 0)).toBe(true);
     });
   });
 

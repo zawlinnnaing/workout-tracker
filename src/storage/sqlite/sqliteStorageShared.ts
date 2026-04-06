@@ -412,6 +412,7 @@ export async function insertWorkoutHistory(
     );
 
     for (const [exercisePosition, exerciseLog] of entry.exercises.entries()) {
+      const historyExerciseId = `${entry.id}:${exerciseLog.id}`;
       await db.runAsync(
         `INSERT INTO workout_history_exercises (
           id,
@@ -426,7 +427,7 @@ export async function insertWorkoutHistory(
           position
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
         [
-          exerciseLog.id,
+          historyExerciseId,
           entry.id,
           exerciseLog.exercise.id,
           exerciseLog.exercise.name,

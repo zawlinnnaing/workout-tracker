@@ -131,6 +131,7 @@ export const useWorkoutRoutineStore = create<WorkoutRoutineState>(
             exercises: log.exercises.map((e) => ({
               ...e,
               completedAt: undefined,
+              completedSets: 0,
             })),
           };
         } else {
@@ -140,6 +141,7 @@ export const useWorkoutRoutineStore = create<WorkoutRoutineState>(
             exercises: log.exercises.map((e) => ({
               ...e,
               completedAt: e.completedAt ?? now,
+              completedSets: e.exercise.numberOfSets,
             })),
           };
         }

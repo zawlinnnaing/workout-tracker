@@ -98,6 +98,30 @@ describe('WorkoutLogScreen', () => {
     expect(screen.getByTestId('workout-completion-progress')).toBeTruthy();
   });
 
+  it('shows 100% completion progress when workout was completed from home', () => {
+    mockGetLog.mockReturnValue({
+      ...mockLog,
+      completedAt: new Date(),
+      exercises: [
+        {
+          id: 'l1',
+          exercise: mockWorkout.exercises[0],
+          completedSets: 3,
+          completedAt: new Date(),
+        },
+        {
+          id: 'l2',
+          exercise: mockWorkout.exercises[1],
+          completedSets: 4,
+          completedAt: new Date(),
+        },
+      ],
+    });
+
+    renderScreen();
+    expect(screen.getByText('100')).toBeTruthy();
+  });
+
   it('shows workout name in header', () => {
     renderScreen();
     expect(screen.getByText('Push Day')).toBeTruthy();
