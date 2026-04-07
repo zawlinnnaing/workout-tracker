@@ -19,7 +19,7 @@ const mockLogs: WorkoutLog[] = [
       {
         id: 'e1',
         exercise: { id: 'ex1', name: 'Bench Press', reps: 8, numberOfSets: 3 },
-        sets: [],
+        completedSets: 3,
         completedAt: new Date('2024-01-01T10:30:00.000Z'),
       },
     ],

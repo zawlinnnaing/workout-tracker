@@ -1,9 +1,9 @@
+import { Exercise, Workout } from '@/types/workout';
+
 import { WorkoutStorage } from '../WorkoutStorage';
 
 import {
-  Exercise,
   ExerciseRow,
-  Workout,
   WorkoutRow,
   getDatabase,
   insertWorkouts,

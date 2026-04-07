@@ -46,7 +46,7 @@ function isManagedWorkoutReminder(
   return data?.kind === WORKOUT_REMINDER_KIND;
 }
 
-function buildDateTrigger(date: Date) {
+function buildDateTrigger(date: Date): Notifications.DateTriggerInput {
   if (Platform.OS === 'android') {
     return {
       type: Notifications.SchedulableTriggerInputTypes.DATE,
