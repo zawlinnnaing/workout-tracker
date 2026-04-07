@@ -3,16 +3,14 @@ import { WorkoutHistoryStorage } from './WorkoutHistoryStorage';
 import { WorkoutLogStorage } from './WorkoutLogStorage';
 import { WorkoutStorage } from './WorkoutStorage';
 
-export type StorageInitializationStatus =
-  | 'initializing-storage'
-  | 'migrating-legacy-data';
+export type StorageInitializationStatus = 'initializing-storage';
 
 export interface StorageInitializationOptions {
   onStatusChange?: (status: StorageInitializationStatus) => void;
 }
 
 export interface StorageBackend {
-  readonly name: 'sqlite' | 'legacy-json';
+  readonly name: 'sqlite';
   readonly workoutStorage: WorkoutStorage;
   readonly workoutLogStorage: WorkoutLogStorage;
   readonly workoutHistoryStorage: WorkoutHistoryStorage;

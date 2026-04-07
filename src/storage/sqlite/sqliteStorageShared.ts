@@ -241,10 +241,6 @@ async function createSchemaV1(db: DbClient): Promise<void> {
       exercise_defaults_weight REAL
     );
 
-    CREATE TABLE IF NOT EXISTS migration_state (
-      key TEXT PRIMARY KEY NOT NULL,
-      value TEXT NOT NULL
-    );
   `);
 }
 
@@ -292,10 +288,7 @@ export async function initializeSchema(db: DbClient): Promise<void> {
   await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION};`);
 }
 
-export async function clearSqliteData(
-  db: DbClient,
-  includeMigrationState: boolean,
-): Promise<void> {
+export async function clearSqliteData(db: DbClient): Promise<void> {
   await db.execAsync(`
     DELETE FROM exercises;
     DELETE FROM workouts;
@@ -304,7 +297,6 @@ export async function clearSqliteData(
     DELETE FROM workout_history_exercises;
     DELETE FROM workout_history;
     DELETE FROM app_settings;
-    ${includeMigrationState ? 'DELETE FROM migration_state;' : ''}
   `);
 }
 

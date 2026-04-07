@@ -1,8 +1,6 @@
-import { createLegacyStorageBackend } from './async/createLegacyStorageBackend';
 import { createSQLiteStorageBackend } from './sqlite/createSQLiteStorageBackend';
 import { SettingsStorage } from './SettingsStorage';
 import {
-  StorageBackend,
   StorageInitializationOptions,
   StorageInitializationStatus,
 } from './storageBackend';
@@ -10,10 +8,8 @@ import { WorkoutHistoryStorage } from './WorkoutHistoryStorage';
 import { WorkoutLogStorage } from './WorkoutLogStorage';
 import { WorkoutStorage } from './WorkoutStorage';
 
-const legacyBackend = createLegacyStorageBackend();
 const sqliteBackend = createSQLiteStorageBackend();
 
-let activeBackend: StorageBackend = legacyBackend;
 let initializePromise: Promise<void> | null = null;
 let isInitialized = false;
 let currentStatus: StorageInitializationStatus = 'initializing-storage';
@@ -21,11 +17,9 @@ const statusListeners = new Set<
   NonNullable<StorageInitializationOptions['onStatusChange']>
 >();
 
-async function withStorageBackend<T>(
-  work: (backend: StorageBackend) => Promise<T>,
-): Promise<T> {
+async function withStorageBackend<T>(work: () => Promise<T>): Promise<T> {
   await initializeStorage();
-  return work(activeBackend);
+  return work();
 }
 
 function notifyStatus(status: StorageInitializationStatus) {
@@ -63,18 +57,7 @@ export async function initializeStorage(
   initializePromise = (async () => {
     try {
       notifyStatus('initializing-storage');
-      await sqliteBackend.initialize({
-        onStatusChange: notifyStatus,
-      });
-      activeBackend = sqliteBackend;
-    } catch (error) {
-      console.error(
-        '[storage] SQLite initialization failed. Falling back to legacy JSON storage for this session.',
-        error,
-      );
-      notifyStatus('initializing-storage');
-      await legacyBackend.initialize();
-      activeBackend = legacyBackend;
+      await sqliteBackend.initialize();
     } finally {
       isInitialized = true;
       statusListeners.clear();
@@ -88,69 +71,52 @@ export async function initializeStorage(
   });
 }
 
-export function getActiveStorageBackendName(): StorageBackend['name'] {
-  return activeBackend.name;
+export function getActiveStorageBackendName(): 'sqlite' {
+  return sqliteBackend.name;
 }
 
 export async function clearAllStorage(): Promise<void> {
-  const results = await Promise.allSettled([
-    legacyBackend.clearAll(),
-    sqliteBackend.clearAll(),
-  ]);
-
-  const failures = results.filter(
-    (result): result is PromiseRejectedResult => result.status === 'rejected',
-  );
-
-  if (failures.length > 0) {
-    console.error('[storage] Failed to clear one or more storage backends.', {
-      failures: failures.map((failure) => failure.reason),
-    });
-  }
+  await sqliteBackend.clearAll();
 }
 
 export const workoutStorage: WorkoutStorage = {
   load() {
-    return withStorageBackend((backend) => backend.workoutStorage.load());
+    return withStorageBackend(() => sqliteBackend.workoutStorage.load());
   },
   save(workouts) {
-    return withStorageBackend((backend) =>
-      backend.workoutStorage.save(workouts),
+    return withStorageBackend(() =>
+      sqliteBackend.workoutStorage.save(workouts),
     );
   },
 };
 
 export const workoutLogStorage: WorkoutLogStorage = {
   load() {
-    return withStorageBackend((backend) => backend.workoutLogStorage.load());
+    return withStorageBackend(() => sqliteBackend.workoutLogStorage.load());
   },
   save(logs) {
-    return withStorageBackend((backend) =>
-      backend.workoutLogStorage.save(logs),
-    );
+    return withStorageBackend(() => sqliteBackend.workoutLogStorage.save(logs));
   },
 };
 
 export const workoutHistoryStorage: WorkoutHistoryStorage = {
   load() {
-    return withStorageBackend((backend) =>
-      backend.workoutHistoryStorage.load(),
-    );
+    return withStorageBackend(() => sqliteBackend.workoutHistoryStorage.load());
   },
   save(logs) {
-    return withStorageBackend((backend) =>
-      backend.workoutHistoryStorage.save(logs),
+    return withStorageBackend(() =>
+      sqliteBackend.workoutHistoryStorage.save(logs),
     );
   },
 };
 
 export const settingsStorage: SettingsStorage = {
   load() {
-    return withStorageBackend((backend) => backend.settingsStorage.load());
+    return withStorageBackend(() => sqliteBackend.settingsStorage.load());
   },
   save(settings) {
-    return withStorageBackend((backend) =>
-      backend.settingsStorage.save(settings),
+    return withStorageBackend(() =>
+      sqliteBackend.settingsStorage.save(settings),
     );
   },
 };

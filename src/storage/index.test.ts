@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
-
 import { AppSettings } from '@/types/settings-types';
 import { Workout, WorkoutLog } from '@/types/workout';
 
@@ -18,15 +16,13 @@ const createStorageSpies = () => ({
   clearAll: jest.fn<Promise<void>, []>(),
 });
 
-const mockLegacySpies = createStorageSpies();
 const mockSqliteSpies = createStorageSpies();
 
 function mockMakeBackend(
-  name: StorageBackend['name'],
   spies: ReturnType<typeof createStorageSpies>,
 ): StorageBackend {
   return {
-    name,
+    name: 'sqlite',
     workoutStorage: {
       load: spies.workoutLoad,
       save: spies.workoutSave,
@@ -48,53 +44,30 @@ function mockMakeBackend(
   };
 }
 
-jest.mock('./async/createLegacyStorageBackend', () => ({
-  createLegacyStorageBackend: () =>
-    mockMakeBackend('legacy-json', mockLegacySpies),
-}));
-
 jest.mock('./sqlite/createSQLiteStorageBackend', () => ({
-  createSQLiteStorageBackend: () => mockMakeBackend('sqlite', mockSqliteSpies),
+  createSQLiteStorageBackend: () => mockMakeBackend(mockSqliteSpies),
 }));
 
-describe('storage backend selection', () => {
-  beforeAll(() => {
-    jest.spyOn(console, 'error').mockImplementation(() => {});
-  });
-
-  afterAll(() => {
-    jest.restoreAllMocks();
-  });
-
+describe('storage backend initialization', () => {
   beforeEach(() => {
     jest.resetModules();
     jest.clearAllMocks();
 
-    mockLegacySpies.initialize.mockResolvedValue(undefined);
     mockSqliteSpies.initialize.mockResolvedValue(undefined);
-    mockLegacySpies.clearAll.mockResolvedValue(undefined);
     mockSqliteSpies.clearAll.mockResolvedValue(undefined);
 
-    mockLegacySpies.workoutLoad.mockResolvedValue([]);
     mockSqliteSpies.workoutLoad.mockResolvedValue([]);
-    mockLegacySpies.workoutLogLoad.mockResolvedValue({});
     mockSqliteSpies.workoutLogLoad.mockResolvedValue({});
-    mockLegacySpies.historyLoad.mockResolvedValue([]);
     mockSqliteSpies.historyLoad.mockResolvedValue([]);
-    mockLegacySpies.settingsLoad.mockResolvedValue(null);
     mockSqliteSpies.settingsLoad.mockResolvedValue(null);
 
-    mockLegacySpies.workoutSave.mockResolvedValue(undefined);
     mockSqliteSpies.workoutSave.mockResolvedValue(undefined);
-    mockLegacySpies.workoutLogSave.mockResolvedValue(undefined);
     mockSqliteSpies.workoutLogSave.mockResolvedValue(undefined);
-    mockLegacySpies.historySave.mockResolvedValue(undefined);
     mockSqliteSpies.historySave.mockResolvedValue(undefined);
-    mockLegacySpies.settingsSave.mockResolvedValue(undefined);
     mockSqliteSpies.settingsSave.mockResolvedValue(undefined);
   });
 
-  it('uses sqlite backend when sqlite initialization succeeds', async () => {
+  it('uses sqlite backend when initialization succeeds', async () => {
     const storage = require('./index') as typeof import('./index');
 
     await storage.initializeStorage();
@@ -103,28 +76,18 @@ describe('storage backend selection', () => {
     expect(storage.getActiveStorageBackendName()).toBe('sqlite');
     expect(mockSqliteSpies.initialize).toHaveBeenCalledTimes(1);
     expect(mockSqliteSpies.workoutLoad).toHaveBeenCalledTimes(1);
-    expect(mockLegacySpies.workoutLoad).not.toHaveBeenCalled();
   });
 
-  it('falls back to legacy backend when sqlite initialization fails', async () => {
+  it('throws when sqlite initialization fails', async () => {
     mockSqliteSpies.initialize.mockRejectedValueOnce(
       new Error('sqlite failed'),
     );
     const storage = require('./index') as typeof import('./index');
 
-    await storage.initializeStorage();
-    await storage.workoutStorage.load();
-
-    expect(storage.getActiveStorageBackendName()).toBe('legacy-json');
-    expect(mockLegacySpies.initialize).toHaveBeenCalledTimes(1);
-    expect(mockLegacySpies.workoutLoad).toHaveBeenCalledTimes(1);
-    expect(mockSqliteSpies.workoutLoad).not.toHaveBeenCalled();
+    await expect(storage.initializeStorage()).rejects.toThrow('sqlite failed');
   });
 
   it('emits initialization status updates while bootstrapping storage', async () => {
-    mockSqliteSpies.initialize.mockImplementation(async (options) => {
-      options?.onStatusChange?.('migrating-legacy-data');
-    });
     const storage = require('./index') as typeof import('./index');
     const statuses: string[] = [];
 
@@ -134,15 +97,14 @@ describe('storage backend selection', () => {
       },
     });
 
-    expect(statuses).toEqual(['initializing-storage', 'migrating-legacy-data']);
+    expect(statuses).toEqual(['initializing-storage']);
   });
 
-  it('clears both backends', async () => {
+  it('clears sqlite backend', async () => {
     const storage = require('./index') as typeof import('./index');
 
     await storage.clearAllStorage();
 
-    expect(mockLegacySpies.clearAll).toHaveBeenCalledTimes(1);
     expect(mockSqliteSpies.clearAll).toHaveBeenCalledTimes(1);
   });
 });
