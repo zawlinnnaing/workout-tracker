@@ -18,7 +18,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "build:ios": "expo prebuild --platform ios && mkdir -p ios/build/prebundle && expo export:embed --platform ios --dev false --bundle-output ios/build/prebundle/main.jsbundle --assets-dest ios/build/prebundle",
-    "website": "npx serve website"
+    "website": "npx serve website",
+    "precommit": "npm run format && npm run lint && npm run typecheck && npm run test"
   },
   "jest": {
     "preset": "jest-expo",
