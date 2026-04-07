@@ -94,6 +94,12 @@ xcodebuild \
   build
 ```
 
+Expo CLI alternative (same goal, Release build on a real device):
+
+```bash
+npx expo run:ios --device --configuration Release
+```
+
 ## Step 2: Verify JS bundle exists
 
 ```bash

@@ -17,6 +17,7 @@
     "test": "jest",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "release:ios": "expo run:ios --device --configuration Release",
     "website": "npx serve website"
   },
   "jest": {
