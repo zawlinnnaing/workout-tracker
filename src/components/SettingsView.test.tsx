@@ -121,6 +121,13 @@ describe('SettingsView', () => {
   it('shows the empty workout state when no workouts exist', () => {
     render(<SettingsView {...defaultProps} hasWorkouts={false} />);
 
-    expect(screen.getByText('Add a workout first')).toBeTruthy();
+    expect(
+      screen.getByText('Create a workout to enable notifications'),
+    ).toBeTruthy();
+    expect(
+      screen.getByText(
+        'You need to create at least 1 workout to enable notifications.',
+      ),
+    ).toBeTruthy();
   });
 });

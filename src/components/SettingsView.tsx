@@ -222,8 +222,19 @@ export function SettingsView({
           </View>
         </View>
 
-        <View className="mb-12 gap-4">
-          <View className="flex-row items-end justify-between gap-4">
+        {showEmptyWorkoutState ? (
+          <SettingsStatusCallout
+            eyebrow="Notifications"
+            title="Create a workout to enable notifications"
+            body="You need to create at least 1 workout to enable notifications."
+            className="mb-6"
+          />
+        ) : null}
+
+        <View
+          className={cn('mb-12 gap-4', showEmptyWorkoutState && 'opacity-40')}
+        >
+          <View className="flex-row items-center justify-between gap-4">
             <View className="flex-1 gap-2">
               <Text className="text-[11px] font-bold uppercase tracking-[0.32em] opacity-40">
                 Notifications
@@ -235,7 +246,7 @@ export function SettingsView({
             </View>
             <View
               className={cn(
-                'w-16 min-w-[80px] items-end justify-end',
+                'w-[52px] min-w-[52px] items-center justify-center',
                 showEmptyWorkoutState && !notificationEnabled && 'opacity-40',
               )}
             >
@@ -249,7 +260,6 @@ export function SettingsView({
                 trackColor={NOTIFICATION_SWITCH_TRACK_COLOR}
                 thumbColor={NOTIFICATION_SWITCH_THUMB_COLOR}
                 ios_backgroundColor={NOTIFICATION_SWITCH_TRACK_COLOR.false}
-                size="lg"
               />
             </View>
           </View>
@@ -303,19 +313,13 @@ export function SettingsView({
               />
             ) : null}
 
-            {showEmptyWorkoutState ? (
-              <SettingsStatusCallout
-                eyebrow="Queue"
-                title="Add a workout first"
-                body="Reminder copy is built from your current routine. Create at least one workout before turning this cadence on."
-              />
-            ) : (
+            {!showEmptyWorkoutState ? (
               <SettingsNotificationPreview
                 nextWorkoutName={previewWorkoutName}
                 quote={previewQuote}
                 scheduleLabel={nextReminderScheduleLabel}
               />
-            )}
+            ) : null}
           </View>
         </View>
 

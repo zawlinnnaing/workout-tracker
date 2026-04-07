@@ -10,6 +10,7 @@ interface SettingsStatusCalloutProps {
   actionLabel?: string;
   onPressAction?: () => void;
   tone?: 'default' | 'warning';
+  className?: string;
 }
 
 export function SettingsStatusCallout({
@@ -19,12 +20,14 @@ export function SettingsStatusCallout({
   actionLabel,
   onPressAction,
   tone = 'default',
+  className,
 }: SettingsStatusCalloutProps) {
   return (
     <View
       className={cn(
         'rounded-[28px] px-5 py-5',
         tone === 'warning' ? 'bg-error-950/20' : 'bg-background-50',
+        className,
       )}
     >
       <Text className="text-[11px] font-bold uppercase tracking-[0.28em] opacity-45">
