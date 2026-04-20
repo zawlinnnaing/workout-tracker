@@ -52,7 +52,7 @@ const logWithCompletedExercise: WorkoutLog = {
 };
 
 function getHistoryId(log: WorkoutLog): string {
-  return `${log.workout.id}:${log.completedAt?.toISOString() ?? 'in-progress'}`;
+  return `${log.workout.id}:${log.completedAt?.toISOString()}`;
 }
 
 let persistedHistory: WorkoutLog[] = [];
@@ -97,7 +97,7 @@ describe('useSyncHistoryFromLogs', () => {
     );
   });
 
-  it('writes to storage when an exercise is completed (partial workout)', async () => {
+  it('does not write to storage for partial workout progress', async () => {
     renderHook(() => useSyncHistoryFromLogs());
 
     await act(async () => {
@@ -107,10 +107,8 @@ describe('useSyncHistoryFromLogs', () => {
       });
     });
 
-    expect(mockSave).toHaveBeenCalledTimes(1);
-    expect(persistedHistory).toHaveLength(1);
-    expect(persistedHistory[0].id).toBe(getHistoryId(logWithCompletedExercise));
-    expect(persistedHistory[0].completedAt).toBeUndefined();
+    expect(mockSave).not.toHaveBeenCalled();
+    expect(persistedHistory).toHaveLength(0);
   });
 
   it('upserts a completion with the same workout and completion timestamp', async () => {

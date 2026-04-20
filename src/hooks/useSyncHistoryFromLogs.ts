@@ -5,11 +5,8 @@ import { useWorkoutHistoryStore } from '@/store/workoutHistoryStore';
 import { useWorkoutRoutineStore } from '@/store/workoutRoutineStore';
 import { WorkoutLog } from '@/types/workout';
 
-const IN_PROGRESS_SUFFIX = 'in-progress';
-
 function getHistoryEntryId(log: WorkoutLog): string {
-  const completionKey = log.completedAt?.toISOString() ?? IN_PROGRESS_SUFFIX;
-  return `${log.workout.id}:${completionKey}`;
+  return `${log.workout.id}:${log.completedAt?.toISOString()}`;
 }
 
 function toHistoryEntry(log: WorkoutLog): WorkoutLog {
@@ -25,7 +22,7 @@ export function useSyncHistoryFromLogs() {
 
   useEffect(() => {
     const logsToSync = Object.values(workoutLogs).filter(
-      (log) => log.completedAt || log.exercises.some((e) => e.completedAt),
+      (log) => !!log.completedAt,
     );
     if (logsToSync.length === 0) return;
 
