@@ -13,7 +13,7 @@ import { useSettings } from '@/hooks/useSettings';
 import { useWorkoutHistory } from '@/hooks/useWorkoutHistory';
 import { useWorkouts } from '@/hooks/useWorkouts';
 import {
-  getWorkoutReminderPermissionStatusAsync,
+  getNotificationsStatus,
   openWorkoutReminderSettingsAsync,
   requestWorkoutReminderPermissionsAsync,
 } from '@/notifications/workoutReminderScheduler';
@@ -397,7 +397,7 @@ export function withSettings(Component: typeof SettingsView) {
       let isMounted = true;
 
       const syncPermissionState = () => {
-        return getWorkoutReminderPermissionStatusAsync()
+        return getNotificationsStatus()
           .then((status) => {
             if (isMounted) {
               setPermissionState(status.status as NotificationPermissionState);

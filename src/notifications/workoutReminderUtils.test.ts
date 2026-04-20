@@ -103,6 +103,29 @@ describe('workoutReminderUtils', () => {
     expect(queue[0]?.workoutName).toBe('Pull Day');
   });
 
+  it('skips reminders on days with completed workouts', () => {
+    const queue = buildWorkoutReminderQueue({
+      now: new Date(2026, 3, 6, 9, 0),
+      workouts,
+      history: [
+        makeHistoryEntry('push', '2026-04-06T07:30:00.000Z'),
+        makeHistoryEntry('pull', '2026-04-07T08:15:00.000Z'),
+      ],
+      notifications: {
+        ...DEFAULT_NOTIFICATION_SETTINGS,
+        enabled: true,
+        patternAnchorDate: '2026-04-06',
+        workoutDays: 2,
+        breakDays: 1,
+        sendHour: 19,
+        sendMinute: 0,
+      },
+      horizonDays: 5,
+    });
+
+    expect(queue.map((entry) => entry.triggerDate.getDate())).toEqual([9, 10]);
+  });
+
   it('formats reminder times in 12-hour format', () => {
     expect(formatReminderTime(6, 5)).toBe('6:05 AM');
     expect(formatReminderTime(19, 0)).toBe('7:00 PM');

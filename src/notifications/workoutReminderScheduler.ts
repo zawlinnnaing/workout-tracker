@@ -73,7 +73,7 @@ export async function ensureWorkoutReminderChannelAsync(): Promise<void> {
   });
 }
 
-export async function getWorkoutReminderPermissionStatusAsync() {
+export async function getNotificationsStatus() {
   return Notifications.getPermissionsAsync();
 }
 
@@ -194,7 +194,7 @@ export async function syncWorkoutReminderQueueAsync(
   snapshot: WorkoutReminderSnapshot,
   options?: { topUpOnly?: boolean; now?: Date },
 ): Promise<number> {
-  const permissionStatus = await getWorkoutReminderPermissionStatusAsync();
+  const permissionStatus = await getNotificationsStatus();
   const schedulingEnabled =
     snapshot.settings.notifications.enabled &&
     permissionStatus.granted &&

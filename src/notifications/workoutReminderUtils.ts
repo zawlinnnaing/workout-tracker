@@ -34,6 +34,20 @@ export function addDays(date: Date, days: number): Date {
   return result;
 }
 
+function getCompletedWorkoutDateKeys(history: WorkoutLog[]): Set<string> {
+  const completedDateKeys = new Set<string>();
+
+  history.forEach((entry) => {
+    if (!entry.completedAt) {
+      return;
+    }
+
+    completedDateKeys.add(getLocalDateKey(entry.completedAt));
+  });
+
+  return completedDateKeys;
+}
+
 export function setLocalTime(date: Date, hour: number, minute: number): Date {
   const result = new Date(date);
   result.setHours(hour, minute, 0, 0);
@@ -127,9 +141,14 @@ export function buildWorkoutReminderQueue({
 
   const reminderQueue: WorkoutReminderContent[] = [];
   const startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const completedDateKeys = getCompletedWorkoutDateKeys(history);
 
   for (let offset = 0; offset < horizonDays; offset += 1) {
     const candidateDay = addDays(startDate, offset);
+    if (completedDateKeys.has(getLocalDateKey(candidateDay))) {
+      continue;
+    }
+
     if (!isWorkoutDay(candidateDay, notifications)) {
       continue;
     }
