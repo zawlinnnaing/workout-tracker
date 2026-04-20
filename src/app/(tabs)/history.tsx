@@ -26,10 +26,10 @@ function HistoryView({ history, onSeeAllStats }: HistoryViewProps) {
     <TabScreenLayout>
       <View className="mb-6">
         <Heading size="2xl" className="font-bold">
-          History
-        </Heading>
-        <Text className="mt-1 text-xs font-semibold uppercase tracking-widest opacity-50">
           Your Training Record
+        </Heading>
+        <Text className="mt-1 text-xs font-semibold uppercase tracking-wide opacity-50">
+          Only completed workouts are logged here.
         </Text>
       </View>
 
